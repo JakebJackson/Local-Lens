@@ -1,10 +1,82 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="
+https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css
+" rel="stylesheet">
+
+    <title>Suburb Insight</title>
 </head>
+
+
 <body>
-    
+    <div class="ui inverted segment">
+        <div class="ui inverted secondary menu">
+            <a class="active item">
+                Home
+            </a>
+            <a class="item">
+                Messages
+            </a>
+            <a class="item">
+                Friends
+            </a>
+        </div>
+    </div>
+
+    <section>
+        <div class="ui selection dropdown">
+            <input type="hidden" name="gender">
+            <i class="dropdown icon"></i>
+            <div class="default text">Price Range</div>
+            <div class="menu">
+                <div class="item" data-value="1">200-400K</div>
+                <div class="item" data-value="0">400-600K</div>
+            </div>
+        </div>
+
+        <div class="ui selection dropdown">
+            <input type="hidden" name="gender">
+            <i class="dropdown icon"></i>
+            <div class="default text">Gender</div>
+            <div class="menu">
+                <div class="item" data-value="1">Male</div>
+                <div class="item" data-value="0">Female</div>
+            </div>
+        </div>
+
+        <div class="ui selection dropdown">
+            <input type="hidden" name="gender">
+            <i class="dropdown icon"></i>
+            <div class="default text">Gender</div>
+            <div class="menu">
+                <div class="item" data-value="1">Male</div>
+                <div class="item" data-value="0">Female</div>
+            </div>
+        </div>
+
+
+        <select name="state" multiple="" class="ui fluid dropdown">
+            <option value="victoria">Victoria</option>
+            <option value="new-south-wales">New South Wales</option>
+            <option value="queensland">Queensland</option>
+            <option value="tasmania">Tasmania</option>
+            <option value="northern-territory">Norther Territory</option>
+            <option value="south-australia">South Australia</option>
+            <option value="western-australia">Western Australia</option>
+        </select>
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js
+    "></script>
+    <script src="./assets/js/script.js"></script>
 </body>
+
 </html>
