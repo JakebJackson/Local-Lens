@@ -5,12 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./assets/css/style.css" rel="stylesheet">
-    <link href="
-https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css
-" rel="stylesheet">
-    
-
-
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker&v=beta"></script>
     <title>Suburb Insight</title>
 </head>
 
@@ -76,13 +72,16 @@ https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css
         </select>
 
         <!-- Search button -->
-        <button id="search-btn" class="ui secondary button wide">
+        <button id="search-btn" class="ui secondary button wide" onclick="markerTest()">
             Search
         </button>
     </div>
 
     <div id="map"class="ui raised container segment menu">
-
+        <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
+            <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
+            </gmp-advanced-marker>
+          </gmp-map>
     </div>
 
     <div id="info-div" class="ui container segment menu">
