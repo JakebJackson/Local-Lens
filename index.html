@@ -1,10 +1,108 @@
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <link href="./assets/css/style.css" rel="stylesheet">
+    <link href="
+https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css
+" rel="stylesheet">
     
+
+
+    <title>Suburb Insight</title>
+</head>
+
+
+<body> 
+    <!-- Nav menu bar -->
+    <div class="ui inverted segment">
+        <div class="ui inverted secondary menu">
+            <a class="active right floated item">
+                Home
+            </a>
+            <a class="item" href="./saved-insights.html">
+                Saved Insights
+            </a>
+            <a class="item">
+                Results
+            </a>
+        </div>
+    </div>
+
+    <!-- Price range selection dropdown -->
+    <div class="ui container segment menu">
+        <div class="ui inverted selection dropdown">
+            <input type="hidden" name="price-range">
+            <i class="dropdown icon"></i>
+            <div class="default text">Price Range</div>
+            <div class="menu">
+                <div class="item" data-value="0">200-400K</div>
+                <div class="item" data-value="1">400-600K</div>
+                <div class="item" data-value="2">600-800K</div>
+                <div class="item" data-value="3">800K-1M</div>
+                <div class="item" data-value="4">1M+</div>
+                <div class="divider"></div>
+                <div class="item" data-value="5">Any</div>
+            </div>
+        </div>
+
+        <!-- Property type selection dropdown -->
+        <div class="ui selection dropdown">
+            <input type="hidden" name="property-type">
+            <i class="dropdown icon"></i>
+            <div class="default text">Property Type</div>
+            <div class="menu">
+                <div class="item" data-value="0">Unit</div>
+                <div class="item" data-value="1">Apartment</div>
+                <div class="item" data-value="2">Duplex</div>
+                <div class="item" data-value="3">House</div>
+                <div class="divider"></div>
+                <div class="item" data-value="5">All</div>
+            </div>
+        </div>
+
+        <!-- State selection dropdown -->
+        <select name="state" multiple="" class="ui fluid dropdown">
+            <option value="">Choose State</option>
+            <option value="victoria">Victoria</option>
+            <option value="new-south-wales">New South Wales</option>
+            <option value="queensland">Queensland</option>
+            <option value="tasmania">Tasmania</option>
+            <option value="northern-territory">Norther Territory</option>
+            <option value="south-australia">South Australia</option>
+            <option value="western-australia">Western Australia</option>
+        </select>
+
+        <!-- Search button -->
+        <button id="search-btn" class="ui secondary button wide">
+            Search
+        </button>
+    </div>
+
+    <div id="map"class="ui raised container segment menu">
+
+    </div>
+
+    <div id="info-div" class="ui container segment menu">
+        <h2 class="ui header">Information Panel</h2>
+    </div>
+
+    <!-- Footer -->
+    <div class="ui section divider segment">
+        <div class="ui center aligned container">
+            <p class="ui subtext">This website was built with Geocode API and Domain Group API </p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js
+    "></script>
+    <script src="./assets/js/script.js"></script>
 </body>
+
 </html>
