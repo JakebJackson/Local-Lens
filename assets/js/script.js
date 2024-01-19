@@ -9,6 +9,7 @@ var markerLat;
 var markerLon;
 var userZoom = 10;
 var map;
+var geocoder;
 
 var searchBtn = $('#search-btn');
 
@@ -26,11 +27,38 @@ async function initMap() {
     mapTypeId: "roadmap",
     mapId: "myMap",
   });
+
+  // CALLING GEOCODING FUNCTION
+  geocoder = new google.maps.Geocoder();
+
+  marker = new google.maps.Marker({
+    map,
+  });
+
+  // EVEMT LISTENER WHEN MAP IS CLICKED
+  map.addListener("click", (e) => {
+    geocode({ location: e.latLng });
+  });
   return map;
 }
 
-// Calls the initMap function.
-initMap();
+// NEED TO TRANSLATE THIS FOR THE CURRENT MAP
+function geocode(request) {
+  // CLEAR FUNCTION: clear();
+  geocoder
+    .geocode(request)
+    .then((result) => {
+      const { results } = result;
+
+      map.setCenter(results[0].geometry.location);
+      marker.setPosition(results[0].geometry.location);
+      marker.setMap(map);
+      return results;
+    })
+    .catch((e) => {
+      alert("Geocode was not successful for the following reason: " + e);
+    });
+}
 
 // This function is called when the search button is clicked by the user.
 async function markerTest() {
@@ -69,7 +97,26 @@ async function markerTest() {
   });
 }
 
+// AUTO COMPLETE CODE
+const center = { lat: 50.064192, lng: -130.605469 };
+// Create a bounding box with sides ~10km away from the center point
+const defaultBounds = {
+  north: center.lat + 0.1,
+  south: center.lat - 0.1,
+  east: center.lng + 0.1,
+  west: center.lng - 0.1,
+};
+const input = document.getElementById("pac-input");
+const options = {
+  bounds: defaultBounds,
+  componentRestrictions: { country: "au" },
+  fields: ["address_components", "geometry", "icon", "name"],
+  strictBounds: false,
+};
+const autocomplete = new google.maps.places.Autocomplete(input, options);
 
+// Calls the initMap function.
+initMap();
 
 
 // Saving user input variables from the HTML input.
@@ -83,3 +130,16 @@ async function markerTest() {
 // A 'Save Insight' button on selected listings to save the listing to localstorage and generate later in the saved-insights page.
 
 // localstorage.getItem() logic for loading the users saved insights the saved-insights page on load.
+
+
+
+// API INTEGRATION IDEAS:
+
+// Currency exchange API for a travel planner.
+// Calender API could also be useful for mapping travel planners.
+// Dictionary API, gets local languages from a map marker and common phrases that might help the user out in a pinch.
+// Air quality of china API?
+// Health API for checking if certain areas have prominent diseases/outbreaks.
+// Job searcher for jobs in the area.
+// NEWS API for recent stories in the area.
+// Imagery API for generating photos of an area you might want to include in a travel planner.
