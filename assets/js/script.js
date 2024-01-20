@@ -118,28 +118,51 @@ const autocomplete = new google.maps.places.Autocomplete(input, options);
 // Calls the initMap function.
 initMap();
 
-
-// Saving user input variables from the HTML input.
-
-// Using saved variables to talk to the Geocode API, this should generate a map on the page that shows the selected area by the user (example if user inputs postcode 3337 the map will show melton.)
-
-// Using saved variables to get property listing information from the domain portal API to generate markers on the geocode API showing where available properties are within the user-specified area.
-
-// Use returned results from the Domain portal API to display the returned listings in a HTML container below the map for more in-depth information. This should respond to when the user clicks on the map markers and shows the corresponding property. (HTML <map> elements might be useful here.)
-
-// A 'Save Insight' button on selected listings to save the listing to localstorage and generate later in the saved-insights page.
-
-// localstorage.getItem() logic for loading the users saved insights the saved-insights page on load.
+var APIKey = "3d535884f42f455f9f5e3299842beecb";
+var keywordInput= document.getElementById("keyword");
+var radiusInput= document.getElementById("radius");
 
 
+// Parameters:
+// [number]
+// [text]
+// [sort-direction] ASC or DESC
+// [location-filter] - latitude, longitude, radius
 
-// API INTEGRATION IDEAS:
+// error code 402 for call limit
+// error code 429 for exceeding 60 requests
 
-// Currency exchange API for a travel planner.
-// Calender API could also be useful for mapping travel planners.
-// Dictionary API, gets local languages from a map marker and common phrases that might help the user out in a pinch.
-// Air quality of china API?
-// Health API for checking if certain areas have prominent diseases/outbreaks.
-// Job searcher for jobs in the area.
-// NEWS API for recent stories in the area.
-// Imagery API for generating photos of an area you might want to include in a travel planner.
+//getting the api string from the user input
+function createCallIUrl(lat, lon) {
+
+    var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}`;
+
+    if (keywordInput.value) {
+        queryURL += `&text=${keywordInput}`;
+    }
+
+    if (radiusInput.value) {
+        queryURL += `&location-filter=${lat, lon, radiusInput}`
+    } else {
+        queryURL += `&location-filter=${lat, lon}`
+    };
+}
+
+function getDataApi(queryURL) {
+
+    fetch(queryURL)
+        .then(function (response) {
+            if (response.ok) {
+                console.log(response);
+                response.json().then(function (data) {
+                    console.log(data);
+                    latestNews(data) 
+                });
+            } else {
+                alert("Error"+ response.statusText);
+            }
+        })
+        .catch(function (error){
+            alert("Unable to connect to headlines, try again later")
+        });
+    };
