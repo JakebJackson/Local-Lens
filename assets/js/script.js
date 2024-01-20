@@ -10,6 +10,11 @@ var markerLon;
 var userZoom = 10;
 var map;
 var geocoder;
+//news associated variables
+var APIKey = "3d535884f42f455f9f5e3299842beecb";
+var keywordInput= document.getElementById("keyword");
+var radiusInput= document.getElementById("radius");
+
 
 var searchBtn = $('#search-btn');
 
@@ -118,9 +123,6 @@ const autocomplete = new google.maps.places.Autocomplete(input, options);
 // Calls the initMap function.
 initMap();
 
-var APIKey = "3d535884f42f455f9f5e3299842beecb";
-var keywordInput= document.getElementById("keyword");
-var radiusInput= document.getElementById("radius");
 
 
 // Parameters:

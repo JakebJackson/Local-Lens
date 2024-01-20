@@ -26,8 +26,20 @@
         </div>
     </div>
 
-    <!-- Price range selection dropdown -->
+       <!-- input area div -->
     <div class="ui container segment menu">
+         
+        <!-- keyword input -->
+    <div class="ui input focus">
+        <input id="keyword" type="text" placeholder="search news">
+    </div>
+
+     <!-- location input -->
+     <div class="ui input focus">
+        <input id="location" type="text" placeholder="location">
+    </div>
+
+    <!-- radius selection dropdown -->
         <div class="ui inverted selection dropdown">
             <input id= keyword type="hidden" name="price-range">
             <i class="dropdown icon"></i>
@@ -43,11 +55,7 @@
             </div>
         </div>
 
-        <div class="ui input focus">
-            <input id="pac-input" type="text" placeholder="Search...">
-        </div>
-
-        <!-- State selection dropdown 
+              <!-- State selection dropdown 
         <select name="state" multiple="" class="ui fluid dropdown">
             <option value="">Choose State</option>
             <option value="victoria">Victoria</option>
