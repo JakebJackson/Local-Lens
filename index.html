@@ -9,10 +9,11 @@
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
     <title>Local Lens</title>
 
+
 </head>
 
 
-<body> 
+<body>
     <!-- Nav menu bar -->
     <div class="ui inverted segment">
         <div class="ui inverted secondary menu">
@@ -20,10 +21,7 @@
                 Home
             </a>
             <a class="item" href="./saved-insights.html">
-                Saved Insights
-            </a>
-            <a class="item">
-                Results
+                Saved Headlines
             </a>
         </div>
     </div>
@@ -33,38 +31,21 @@
         <div class="ui inverted selection dropdown">
             <input id= keyword type="hidden" name="price-range">
             <i class="dropdown icon"></i>
-            <div class="default text">Keyword</div>
+
+            <div class="default text">Choose a radius</div>
+
             <div class="menu">
-                <div class="item" data-value="0">200-400K</div>
-                <div class="item" data-value="1">400-600K</div>
-                <div class="item" data-value="2">600-800K</div>
-                <div class="item" data-value="3">800K-1M</div>
-                <div class="item" data-value="4">1M+</div>
-                <div class="divider"></div>
-                <div class="item" data-value="5">Any</div>
+                <div class="item" data-value="10">10km</div>
+                <div class="item" data-value="20">20km</div>
+                <div class="item" data-value="30">30km</div>
+                <div class="item" data-value="40">40km</div>
+                <div class="item" data-value="50">50km</div>
             </div>
         </div>
-
-        <!-- Property type selection dropdown -->
-        <div class="ui selection dropdown">
-            <input type="hidden" name="property-type">
-            <i class="dropdown icon"></i>
-            <div class="default text">Property Type</div>
-            <div class="menu">
-                <div class="item" data-value="0">Unit</div>
-                <div class="item" data-value="1">Apartment</div>
-                <div class="item" data-value="2">Duplex</div>
-                <div class="item" data-value="3">House</div>
-                <div class="divider"></div>
-                <div class="item" data-value="5">All</div>
-            </div>
-        </div>
-
 
         <div class="ui input focus">
             <input id="pac-input" type="text" placeholder="Search...">
-          </div>
-
+        </div>
 
         <!-- State selection dropdown 
         <select name="state" multiple="" class="ui fluid dropdown">
@@ -85,7 +66,7 @@
     </div>
 
 
-    <div id="map"class="ui raised container segment menu">
+      <div id="map"class="ui raised container segment menu">
         <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
             </gmp-advanced-marker>
@@ -93,13 +74,27 @@
     </div>
 
    <div id="info-div" class="ui container segment menu">
-        <h2 class="ui header">Information Panel</h2>
+        <h2 class="ui header">Headline storage</h2>
     </div>
+      
+          <!-- Display saved data -->
+          <div id="savedData" class="ui message">
+            <div class="header"></div>
+            <p></p>
+          </div>
+      
+          <!-- Buttons for Save and Delete -->
+          <div class="ui two buttons">
+            <button class="ui primary button" onclick="saveData()">Save</button>
+            <button class="ui red button" onclick="deleteData()">Delete</button>
+          </div>
+        </div>
+      </div>
 
     <!-- Footer -->
     <div class="ui section divider segment">
         <div class="ui center aligned container">
-            <p class="ui subtext">This website was built with Geocode API and Domain Group API </p>
+            <p class="ui subtext">This website is using Google Maps API in combination with "PLACEHOLDER API" </p>
         </div>
     </div>
 

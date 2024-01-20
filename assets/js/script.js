@@ -1,4 +1,3 @@
-
 // Enables functionality for dropdown menus
 $('.ui.dropdown')
   .dropdown();
@@ -118,7 +117,6 @@ const autocomplete = new google.maps.places.Autocomplete(input, options);
 
 // Calls the initMap function.
 initMap();
-
 
 var APIKey = "3d535884f42f455f9f5e3299842beecb";
 var keywordInput= document.getElementById("keyword");
