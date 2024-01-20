@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./assets/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
-   
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
+    <title>Local Lens</title>
 
-
-    <title>Suburb Insight</title>
 </head>
 
 
@@ -61,7 +60,13 @@
             </div>
         </div>
 
-        <!-- State selection dropdown -->
+
+        <div class="ui input focus">
+            <input id="pac-input" type="text" placeholder="Search...">
+          </div>
+
+
+        <!-- State selection dropdown 
         <select name="state" multiple="" class="ui fluid dropdown">
             <option value="">Choose State</option>
             <option value="victoria">Victoria</option>
@@ -71,23 +76,23 @@
             <option value="northern-territory">Norther Territory</option>
             <option value="south-australia">South Australia</option>
             <option value="western-australia">Western Australia</option>
-        </select>
+        </select> -->
 
         <!-- Search button -->
-        <button id="search-btn" class="ui secondary button wide">
+        <button id="search-btn" class="ui secondary button wide" onclick="markerTest()">
             Search
         </button>
     </div>
 
-    
-        <map name="result-map" class="ui raised container segment menu">
-            <area shape="rect" coords="" alt="Computer" href="">
-            <area shape="rect" coords="" alt="Phone" href="">
-            <area shape="circle" coords="" alt="Cup of coffee" href="">
-        </map>
-    
-   
-    <div id="info-div" class="ui container segment menu">
+
+    <div id="map"class="ui raised container segment menu">
+        <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
+            <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
+            </gmp-advanced-marker>
+          </gmp-map>
+    </div>
+
+   <div id="info-div" class="ui container segment menu">
         <h2 class="ui header">Information Panel</h2>
     </div>
 
