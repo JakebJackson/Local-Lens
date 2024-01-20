@@ -12,8 +12,8 @@ var map;
 var geocoder;
 //news associated variables
 var APIKey = "3d535884f42f455f9f5e3299842beecb";
-var keywordInput= document.getElementById("keyword");
-var radiusInput= document.getElementById("radius");
+var keywordInput = document.getElementById("keyword");
+var radiusInput = document.getElementById("radius");
 
 
 var searchBtn = $('#search-btn');
@@ -79,7 +79,7 @@ async function markerTest() {
   // Creates a new map marker 
   const marker = new AdvancedMarkerElement({
     map: map,
-    position: { lat: markerLat, lng: markerLon},
+    position: { lat: markerLat, lng: markerLon },
     title: "House",
   });
 
@@ -137,34 +137,34 @@ initMap();
 //getting the api string from the user input
 function createCallIUrl(lat, lon) {
 
-    var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}`;
+  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}`;
 
-    if (keywordInput.value) {
-        queryURL += `&text=${keywordInput}`;
-    }
+  if (keywordInput.value) {
+    queryURL += `&text=${keywordInput}`;
+  }
 
-    if (radiusInput.value) {
-        queryURL += `&location-filter=${lat, lon, radiusInput}`
-    } else {
-        queryURL += `&location-filter=${lat, lon}`
-    };
+  if (radiusInput.value) {
+    queryURL += `&location-filter=${lat, lon, radiusInput}`
+  } else {
+    queryURL += `&location-filter=${lat, lon}`
+  };
 }
 
 function getDataApi(queryURL) {
 
-    fetch(queryURL)
-        .then(function (response) {
-            if (response.ok) {
-                console.log(response);
-                response.json().then(function (data) {
-                    console.log(data);
-                    latestNews(data) 
-                });
-            } else {
-                alert("Error"+ response.statusText);
-            }
-        })
-        .catch(function (error){
-            alert("Unable to connect to headlines, try again later")
+  fetch(queryURL)
+    .then(function (response) {
+      if (response.ok) {
+        console.log(response);
+        response.json().then(function (data) {
+          console.log(data);
+          latestNews(data)
         });
-    };
+      } else {
+        alert("Error" + response.statusText);
+      }
+    })
+    .catch(function (error) {
+      alert("Unable to connect to headlines, try again later")
+    });
+};
