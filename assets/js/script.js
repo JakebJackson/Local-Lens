@@ -10,6 +10,7 @@ var markerLon;
 var userZoom = 10;
 var map;
 var geocoder;
+
 //news associated variables
 var APIKey = "3d535884f42f455f9f5e3299842beecb";
 var keywordInput = document.getElementById("keyword");
@@ -68,8 +69,6 @@ function geocode(request) {
     .catch((e) => {
       alert("Geocode was not successful for the following reason: " + e);
     });
-
-  
 }
 
 // This function is called when the search button is clicked by the user.
@@ -86,7 +85,7 @@ async function markerTest() {
   // Creates a new map marker 
   const marker = new AdvancedMarkerElement({
     map: map,
-    position: { lat: markerLat, lng: markerLon },
+    position: { lat: markerLat, lng: markerLon},
     title: "House",
   });
 
@@ -109,41 +108,26 @@ async function markerTest() {
   });
 }
 
-// AUTO COMPLETE CODE
-const center = { lat: 50.064192, lng: -130.605469 };
-// Create a bounding box with sides ~10km away from the center point
-const defaultBounds = {
-  north: center.lat + 0.1,
-  south: center.lat - 0.1,
-  east: center.lng + 0.1,
-  west: center.lng - 0.1,
-};
-
-//autofill to city input fields
-const cityOptions = {
-  bounds: defaultBounds,
-  fields: ["address_components", "geometry", "icon", "name"],
-  types:["(cities)"], //restricts search to cities
-  strictBounds: false
-};
-
-const cityAutocomplete = new google.maps.places.Autocomplete(cityInput, cityOptions);
-
-//autofill for country input fields
-const countryOptions = {
-  bounds: defaultBounds,
-  fields: ["address_components", "geometry", "icon", "name"],
-  types:["(countries)"], //restricts search to countries
-  strictBounds: false
-};
-
-const countryAutocomplete = new google.maps.places.Autocomplete(countryInput, countryOptions);
-
+// // AUTO COMPLETE CODE
+// const center = { lat: 50.064192, lng: -130.605469 };
+// // Create a bounding box with sides ~10km away from the center point
+// const defaultBounds = {
+//   north: center.lat + 0.1,
+//   south: center.lat - 0.1,
+//   east: center.lng + 0.1,
+//   west: center.lng - 0.1,
+// };
+// const input = document.getElementById("pac-input");
+// const options = {
+//   bounds: defaultBounds,
+//   componentRestrictions: { country: "au" },
+//   fields: ["address_components", "geometry", "icon", "name"],
+//   strictBounds: false,
+// };
+// const autocomplete = new google.maps.places.Autocomplete(input, options);
 
 // Calls the initMap function.
 initMap();
-
-
 
 // Parameters:
 // [number]
@@ -157,19 +141,76 @@ initMap();
 // event listener on the search button click
 searchBtn.addEventListener("click", handleSearchEvent);
 
-function handleSearchEvent(){
-  var keyword = keywordInput.value;
-  var city = cityInput.value;
-  var country = countryInput.value;
+function handleSearchEvent() {
+  var keyword = keywordInput.value.trim();
+  var cityName = cityInput.value.trim();
+  var countryName = countryInput.value.trim();
   var radius = radiusInput.value;
 
-  console.log(keyword, city, country, radius);
+  // checking the if countryName input is VALID 
+  // Using searchCountry function (below this) to do so (json library use)
+  searchCountry(countryName);
 
-// createCallUrl(keyword, city, country, radius);
+  //if it returns false from searchCountry function we have an alert
+  // and our function returns ie STOPS
+  var isCountryValid= searchCountry(countryName);
+  
+  if (!isCountryValid){
+    alert("invalid country, please enter a valid country or check spelling")
+    return;
+  }
+
+//   // CANNOT FIND CITY LIBRARY
+//   // checking the if cityName input is VALID 
+//   // Using searchCity function (below this) to do so (json library use)
+//   searchCity(cityName);
+
+//   //if it returns false from searchCity function we have an alert
+//   // and our function returns ie STOPS
+//   var isCityValid= searchCity(cityName);
+  
+//   if (!isCityValid){
+//     alert("invalid city, please enter a valid city or check spelling")
+//     return;
+//   }
+// send this input over to create call url function
+  createCallUrl(keyword, cityName, countryName, radius);
 }
 
+//function for determining if the country is VALID (or correctly spelled)  usinng json library
+// countryName parameter has been parsed through handleSearchEvent where this function is used 
+function searchCountry(countryName) {
+
+  var countryList = country.names();
+
+  if (!countryList.includes(countryName)) {
+    return false;
+  }
+  else {
+    return true;
+  }
+};
+
+//function for determining if the city is VALID (or correctly spelled)  usinng json library
+// cityName parameter has been parsed through handleSearchEvent where this function is used 
+
+// CANNOT FIND CITY LIBRARY
+// function searchCity(cityName) {
+
+//   var cityList = country.names();
+
+//   if (!cityList.includes(cityName)) {
+//     return false;
+//   }
+//   else {
+//     return true;
+//   }
+// };
+
+
+
 //getting the api string from the user input
-function createCallUrl(lat, lon) {
+function createCallUrl(keyword, lat, lon, radius) {
 
   //query url is generated dynamically based on user request
   //inbuilt is the apikey, using teh language english, and the current date range to ensure current news
@@ -177,9 +218,16 @@ function createCallUrl(lat, lon) {
 
   //ecode URI cmponent ensures that the input is concatenated correctly to the URL
   //this uses teh input value of the keyword user input
-  if (keywordInput.value) {
-    queryURL += `&text=${encodeURIComponent(keywordInput.value)}`;
+  if (keyword) {
+    queryURL += `&text=${encodeURIComponent(keyword)}`;
   }
+
+  //ecode URI cmponent ensures that the input is concatenated correctly to the URL
+  //this uses teh input value of the keyword user input
+  if (cityName) {
+    queryURL += `&location-filter=${encodeURIComponent(lat,lon)}`;
+  }
+
 
   //ecode URI component ensures that the input is concatenated correctly to the URL
   //this uses the input value of the radius user input as well as the lat and lon from the google map function
@@ -196,6 +244,7 @@ function createCallUrl(lat, lon) {
 
 }
 
+// This is the api call using the queryURL concatenated above from user input
 function getDataApi(queryURL) {
 
   fetch(queryURL)
