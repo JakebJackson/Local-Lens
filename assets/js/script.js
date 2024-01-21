@@ -61,22 +61,22 @@ function handleSearchEvent() {
 //     return;
 //   }
 // send this input over to create call url function
-  createCallUrl(keyword, cityName, countryName, radius);
-  getGeoNewsApi(cityName, countryName,);
+   getGeoNewsApi(cityName, countryName,);
+
 }
 
 //function for determining if the country is VALID (or correctly spelled)  usinng json library
 // countryName parameter has been parsed through handleSearchEvent where this function is used 
 function searchCountry(countryName) {
+return true;
+  // var countryList = country.names();
 
-  var countryList = country.names();
-
-  if (!countryList.includes(countryName)) {
-    return false;
-  }
-  else {
-    return true;
-  }
+  // if (!countryList.includes(countryName)) {
+  //   return false;
+  // }
+  // else {
+  //   return true;
+  // }
 };
 
 //function for determining if the city is VALID (or correctly spelled)  usinng json library
@@ -97,35 +97,37 @@ function searchCountry(countryName) {
 
 //using the news API to create the geo lat and lon 
 // coordinates for teh location filder in the main api call
-function getGeoNewsApi(cityName, countryName,) {
+async function getGeoNewsApi(cityName, countryName,) {
 
   var newsGeoUrl= `https://api.worldnewsapi.com/geo-coordinates?api-key=${APIKey}&location=${encodeURIComponent(cityName, countryName,)}`
+var response = await fetch(newsGeoUrl);
+var data = await response.json();
+console.log(data);
+    // .then(function (response) {
+    //   if (response.ok) {
+    //     console.log(response);
+    //     return response.json()
 
-  fetch(newsGeoUrl)
-    .then(function (response) {
-      if (response.ok) {
-        console.log(response);
-        return response.json()
+    //   } else {
+    //     throw new error("Network response not okay");
+    //   }
+    // })
 
-      } else {
-        throw new error("Network response not okay");
-      }
-    })
+    // .then(function (data) {
+    //   console.log(data);
+    //   latestNews(data)
+    // })
 
-    .then(function (data) {
-      console.log(data);
-      latestNews(data)
-    })
-
-    .catch(function (error) {
-      console.error("fetch opeation failed, error.message");
-      alert("Unable to connect to location data, check spelling")
-    });
+    // .catch(function (error) {
+    //   console.error("fetch opeation failed, error.message");
+    //   alert("Unable to connect to location data, check spelling")
+    // });
+    createCallUrl();
 };
 
 
 //getting the api string from the user input
-function createCallUrl(keyword, lat, lon, radius) {
+function createCallUrl() {
 
   //query url is generated dynamically based on user request
   //inbuilt is the apikey, using teh language english, and the current date range to ensure current news
@@ -133,17 +135,17 @@ function createCallUrl(keyword, lat, lon, radius) {
  
   //ecode URI cmponent ensures that the input is concatenated correctly to the URL
   //this uses teh input value of the keyword user input
-  if (keyword) {
-    queryURL += `&text=${encodeURIComponent(keyword)}`;
-  }
+  // if (keyword) {
+  //   queryURL += `&text=${encodeURIComponent(keyword)}`;
+  // }
 
-   //ecode URI component ensures that the input is concatenated correctly to the URL
-  //this uses the input value of the radius user input as well as the lat and lon from the google map function
-  if (radius) {
-    queryURL += `&location-filter=${lat},${lon},${encodeURIComponent(radius)}`
-  } else {
-    queryURL += `&location-filter=${lat, lon}`
-  };
+  //  //ecode URI component ensures that the input is concatenated correctly to the URL
+  // //this uses the input value of the radius user input as well as the lat and lon from the google map function
+  // if (radius) {
+  //   queryURL += `&location-filter=${lat},${lon},${encodeURIComponent(radius)}`
+  // } else {
+  //   queryURL += `&location-filter=${lat, lon}`
+  // };
 
   //log what is being called 
   console.log(queryURL);
@@ -153,27 +155,30 @@ function createCallUrl(keyword, lat, lon, radius) {
 }
 
 // This is the api call using the queryURL concatenated above from user input
-function getDataApi(queryURL) {
+async function getDataApi(queryURL) {
 
-  fetch(queryURL)
-    .then(function (response) {
-      if (response.ok) {
-        console.log(response);
-        return response.json()
+  var newsResponse= await fetch(queryURL)
+  var newsData = await newsResponse.json();
+  console.log(newsData);
+    
+  // .then(function (response) {
+  //     if (response.ok) {
+  //       console.log(response);
+  //       return response.json()
 
-      } else {
-        throw new error("Network response not okay");
-      }
-    })
+  //     } else {
+  //       throw new error("Network response not okay");
+  //     }
+  //   })
 
-    .then(function (data) {
-      console.log(data);
-      latestNews(data)
-    })
+  //   .then(function (data) {
+  //     console.log(data);
+  //     latestNews(data)
+  //   })
 
-    .catch(function (error) {
-      console.error("fetch opeation failed, error.message");
-      alert("Unable to connect to headlines, try again later")
-    });
+  //   .catch(function (error) {
+  //     console.error("fetch opeation failed, error.message");
+  //     alert("Unable to connect to headlines, try again later")
+  //   });
 };
 
