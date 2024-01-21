@@ -13,10 +13,15 @@ var geocoder;
 //news associated variables
 var APIKey = "3d535884f42f455f9f5e3299842beecb";
 var keywordInput = document.getElementById("keyword");
+var cityInput = document.getElementById("city");
+var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
+var searchBtn = document.getElementById("search-btn");
 
-
-var searchBtn = $('#search-btn');
+//getting the date from 7 days ago, to keep news articles current
+var currentDate = new Date();
+var lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+console.log(lastWeekDate);
 
 // Initialise map function, uses async prefix to ensure that it loads as the page loads.
 async function initMap() {
@@ -63,6 +68,8 @@ function geocode(request) {
     .catch((e) => {
       alert("Geocode was not successful for the following reason: " + e);
     });
+
+  
 }
 
 // This function is called when the search button is clicked by the user.
@@ -111,7 +118,7 @@ const defaultBounds = {
   east: center.lng + 0.1,
   west: center.lng - 0.1,
 };
-const input = document.getElementById("pac-input");
+const input = document.getElementById("location");
 const options = {
   bounds: defaultBounds,
   componentRestrictions: { country: "au" },
@@ -134,20 +141,44 @@ initMap();
 // error code 402 for call limit
 // error code 429 for exceeding 60 requests
 
+// event listener on the search button click
+searchBtn.addEventListener("click", handleSearchEvent);
+
+function handleSearchEvent(){
+  var keyword = keywordInput.value;
+  var city = cityInput.value;
+  var country = countryInput.value;
+  var radius = radiusInput.value;
+
+createCallUrl(keyword, city, country, radius);
+}
+
 //getting the api string from the user input
-function createCallIUrl(lat, lon) {
+function createCallUrl(lat, lon) {
 
-  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}`;
+  //query url is generated dynamically based on user request
+  //inbuilt is the apikey, using teh language english, and the current date range to ensure current news
+  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en`;
 
+  //ecode URI cmponent ensures that the input is concatenated correctly to the URL
+  //this uses teh input value of the keyword user input
   if (keywordInput.value) {
-    queryURL += `&text=${keywordInput}`;
+    queryURL += `&text=${encodeURIComponent(keywordInput.value)}`;
   }
 
+  //ecode URI component ensures that the input is concatenated correctly to the URL
+  //this uses the input value of the radius user input as well as the lat and lon from the google map function
   if (radiusInput.value) {
-    queryURL += `&location-filter=${lat, lon, radiusInput}`
+    queryURL += `&location-filter=${lat},${lon},${encodeURIComponent(radiusInput.value)}`
   } else {
     queryURL += `&location-filter=${lat, lon}`
   };
+
+  //log what is being called 
+  console.log(queryURL);
+  //launch getDataAPi and pass in the queryURL
+  getDataApi(queryURL);
+
 }
 
 function getDataApi(queryURL) {
@@ -156,15 +187,21 @@ function getDataApi(queryURL) {
     .then(function (response) {
       if (response.ok) {
         console.log(response);
-        response.json().then(function (data) {
-          console.log(data);
-          latestNews(data)
-        });
+        return response.json()
+
       } else {
-        alert("Error" + response.statusText);
+        throw new error("Network response not okay");
       }
     })
+
+    .then(function (data) {
+      console.log(data);
+      latestNews(data)
+    })
+
     .catch(function (error) {
+      console.error("fetch opeation failed, error.message");
       alert("Unable to connect to headlines, try again later")
     });
 };
+

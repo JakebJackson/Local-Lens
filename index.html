@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./assets/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
     <title>Local Lens</title>
 
 
@@ -26,22 +27,27 @@
         </div>
     </div>
 
-       <!-- input area div -->
+    <!-- input area div -->
     <div class="ui container segment menu">
-         
+
         <!-- keyword input -->
-    <div class="ui input focus">
-        <input id="keyword" type="text" placeholder="search news">
-    </div>
+        <div class="ui input focus">
+            <input id="keyword" type="text" placeholder="Keyword Search">
+        </div>
 
-     <!-- location input -->
-     <div class="ui input focus">
-        <input id="location" type="text" placeholder="location">
-    </div>
+        <!-- city input -->
+        <div class="ui input focus">
+            <input id="city" type="text" placeholder="City Search">
+        </div>
 
-    <!-- radius selection dropdown -->
+         <!-- country input -->
+         <div class="ui input focus">
+            <input id="country" type="text" placeholder="Country Search">
+        </div>
+
+        <!-- radius selection dropdown -->
         <div class="ui inverted selection dropdown">
-            <input id= keyword type="hidden" name="price-range">
+            <input id=radius type="hidden" name="Radius">
             <i class="dropdown icon"></i>
 
             <div class="default text">Choose a radius</div>
@@ -55,7 +61,7 @@
             </div>
         </div>
 
-              <!-- State selection dropdown 
+        <!-- State selection dropdown 
         <select name="state" multiple="" class="ui fluid dropdown">
             <option value="">Choose State</option>
             <option value="victoria">Victoria</option>
@@ -68,36 +74,40 @@
         </select> -->
 
         <!-- Search button -->
-        <button id="search-btn" class="ui secondary button wide" onclick="markerTest()">
+        <button id="search-btn" class="ui secondary button wide">
             Search
         </button>
     </div>
 
 
-      <div id="map"class="ui raised container segment menu">
+    <div id="map" class="ui raised container segment menu">
         <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
             </gmp-advanced-marker>
-          </gmp-map>
+        </gmp-map>
     </div>
 
-   <div id="info-div" class="ui container segment menu">
-        <h2 class="ui header">Headline storage</h2>
-    </div>
-      
-          <!-- Display saved data -->
-          <div id="savedData" class="ui message">
-            <div class="header"></div>
-            <p></p>
-          </div>
-      
-          <!-- Buttons for Save and Delete -->
-          <div class="ui two buttons">
-            <button class="ui primary button" onclick="saveData()">Save</button>
-            <button class="ui red button" onclick="deleteData()">Delete</button>
-          </div>
+    <div id="info-div" class="ui container segment">
+        <h2 class="ui header">Headlines</h2>
+        <div class="ui segment">
+            <!-- loader for between search and results -->
+            <!-- <div class="ui disabled loader"></div> -->
         </div>
-      </div>
+    </div>
+
+    <!-- Display saved data -->
+    <div id="savedData" class="ui message">
+        <div class="header"></div>
+        <p></p>
+    </div>
+
+    <!-- Buttons for Save and Delete -->
+    <div class="ui two buttons">
+        <button class="ui primary button" onclick="saveData()">Save</button>
+        <button class="ui red button" onclick="deleteData()">Delete</button>
+    </div>
+    </div>
+    </div>
 
     <!-- Footer -->
     <div class="ui section divider segment">
