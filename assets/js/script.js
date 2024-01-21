@@ -118,14 +118,27 @@ const defaultBounds = {
   east: center.lng + 0.1,
   west: center.lng - 0.1,
 };
-const input = document.getElementById("location");
-const options = {
+
+//autofill to city input fields
+const cityOptions = {
   bounds: defaultBounds,
-  componentRestrictions: { country: "au" },
   fields: ["address_components", "geometry", "icon", "name"],
-  strictBounds: false,
+  types:["(cities)"], //restricts search to cities
+  strictBounds: false
 };
-const autocomplete = new google.maps.places.Autocomplete(input, options);
+
+const cityAutocomplete = new google.maps.places.Autocomplete(cityInput, cityOptions);
+
+//autofill for country input fields
+const countryOptions = {
+  bounds: defaultBounds,
+  fields: ["address_components", "geometry", "icon", "name"],
+  types:["(countries)"], //restricts search to countries
+  strictBounds: false
+};
+
+const countryAutocomplete = new google.maps.places.Autocomplete(countryInput, countryOptions);
+
 
 // Calls the initMap function.
 initMap();
@@ -150,7 +163,9 @@ function handleSearchEvent(){
   var country = countryInput.value;
   var radius = radiusInput.value;
 
-createCallUrl(keyword, city, country, radius);
+  console.log(keyword, city, country, radius);
+
+// createCallUrl(keyword, city, country, radius);
 }
 
 //getting the api string from the user input
