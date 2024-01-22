@@ -11,6 +11,8 @@ var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
 var publish = document.getElementById("publish-jobs");
+var jobsData; //establishing global variable for API call
+
 //getting the date from 7 days ago, in required parameter format, to keep news articles current
 
 // event listener on the search button click
@@ -54,7 +56,7 @@ function handleSearchEvent() {
     return;
   }
   // send this input over to create call url function
-  createCallUrl(countryCode, keyword, cityName, countryName, radius);
+  createCallUrl(countryCode, keyword, cityName, radius);
 }
 
 //function for determining if the country is VALID (or correctly spelled)  usinng json library
@@ -91,7 +93,7 @@ function validateCity(cityName) {
 
 
 //getting the api string from the user input
-function createCallUrl(countryCode, keyword, cityName, countryName, radius) {
+function createCallUrl(countryCode, keyword, cityName, radius) {
 
   //query url is generated dynamically based on user request
   //inbuilt is the APIkey, using language english, limit return to 10 articles
@@ -104,6 +106,9 @@ function createCallUrl(countryCode, keyword, cityName, countryName, radius) {
     queryURL += `&what=${encodeURIComponent(keyword)}`;
   }
 
+  if (cityName) {
+    queryURL += `&where=${encodeURIComponent(cityName)}`;
+  }
   //ecode URI component ensures that the input is concatenated correctly to the URL
   //this uses the input value of the radius user input as well as the lat and lon from the google map function
   if (radius) {
@@ -114,38 +119,23 @@ function createCallUrl(countryCode, keyword, cityName, countryName, radius) {
   console.log(queryURL);
   //launch getDataAPi and pass in the queryURL
   getDataApi(queryURL);
-
 }
 
 // This is the api call using the queryURL concatenated above from user input
 async function getDataApi(queryURL) {
-
-
   var jobsResponse = await fetch(queryURL);
-   var jobsData = await jobsResponse.json();
-  console.log(jobsData);
-  
+  jobsData = await jobsResponse.json();
+  publishArticles(jobsData)
+  console.log(jobsData)
 };
 
-function publishArticles(articles) {
+function publishArticles(jobsData) {}
+// jobsdata > results {0-9}
+// jobsdata > company > display_name
+// jobsdata > created
+// jobsdata > description
+// jobsdata > title
 
-  for (var i = 0; i < (articles.length < 10 ? articles.length : 10); i++) {
-    //need to go through article response and see if it has key/article etc 
-    // and how to retrieve/ publish that
-    var newLineDiv = document.createElement("ui container segment")
-    var articleTitle = document.createElement("href"); //does this need to be href? or add attribute
-    var publishedDate = document.createElement("p");
-    var articleSaveBtn = document.createElement("ui primary button");
-
-
-    articleTitle.textContent = "" //from object also needs href
-    publishedDate.textContent = "" //from object
-    articleSaveBtn.name = "Save" //button
-
-    publish.appendChild(newLineDiv);
-    newLineDiv.appendChild(publishedDate);
-    newLineDiv.appendChild(articleTitle);
-    newLineDiv.appendChild(articleSaveBtn);
+  for (var i = 0; i < (jobsData.length); i++) {
 
   }
-}
