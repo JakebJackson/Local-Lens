@@ -35,40 +35,40 @@ function handleSearchEvent() {
   var radius = radiusInput.value;
 
   // checking the if countryName input is VALID 
-  // Using searchCountry function (below this) to do so (json library use)
-  searchCountry(countryName);
+  // Using validateCountry function (below this) to do so (json library use)
 
-  //if it returns false from searchCountry function we have an alert
+  validateCountry(countryName);
+  //if it returns false from validateCountry function we have an alert
   // and our function returns ie STOPS
-  var isCountryValid= searchCountry(countryName);
-  
-  if (!isCountryValid){
+  var isCountryValid = validateCountry(countryName);
+
+  if (!isCountryValid) {
     alert("invalid country, please enter a valid country or check spelling")
     return;
   }
 
-//   // CANNOT FIND CITY LIBRARY
-//   // checking the if cityName input is VALID 
-//   // Using searchCity function (below this) to do so (json library use)
-//   searchCity(cityName);
-
-//   //if it returns false from searchCity function we have an alert
-//   // and our function returns ie STOPS
-//   var isCityValid= searchCity(cityName);
+  // CANNOT FIND A CITY LIBRARY CURRENTLY future development
+  // checking the if cityName input is VALID 
+  // Using  validateCity function (below this) to do so (json library use)
+  validateCity(cityName);
   
-//   if (!isCityValid){
-//     alert("invalid city, please enter a valid city or check spelling")
-//     return;
-//   }
-// send this input over to create call url function
-   getGeoNewsApi(cityName, countryName,);
+  //if it returns false from  validateCity function we have an alert
+  // and our function returns ie STOPS
+  var isCityValid =  validateCity(cityName);
+
+  if (!isCityValid) {
+    alert("invalid city, please enter a valid city or check spelling")
+    return;
+  }
+  // send this input over to create call url function
+  getGeoNewsApi(cityName, countryName);
 
 }
 
 //function for determining if the country is VALID (or correctly spelled)  usinng json library
 // countryName parameter has been parsed through handleSearchEvent where this function is used 
-function searchCountry(countryName) {
-return true;
+function validateCountry(countryName) {
+  return true;  //LIBRARY CODE NOT WORKING- return true automatically for MVP
   // var countryList = country.names();
 
   // if (!countryList.includes(countryName)) {
@@ -83,46 +83,49 @@ return true;
 // cityName parameter has been parsed through handleSearchEvent where this function is used 
 
 // CANNOT FIND CITY LIBRARY
-// function searchCity(cityName) {
+function  validateCity(cityName) {
+  return true;  //LIBRARY CODE NOT WORKING- return true automatically for MVP
+  // var cityList = city.names();
 
-//   var cityList = country.names();
-
-//   if (!cityList.includes(cityName)) {
-//     return false;
-//   }
-//   else {
-//     return true;
-//   }
-// };
+  // if (!cityList.includes(cityName)) {
+  //   return false;
+  // }
+  // else {
+  //   return true;}
+  
+   
+};
 
 //using the news API to create the geo lat and lon 
-// coordinates for teh location filder in the main api call
-async function getGeoNewsApi(cityName, countryName,) {
+// coordinates for the location filder in the main api call
+async function getGeoNewsApi(cityName, countryName) {
 
-  var newsGeoUrl= `https://api.worldnewsapi.com/geo-coordinates?api-key=${APIKey}&location=${encodeURIComponent(cityName, countryName,)}`
-var response = await fetch(newsGeoUrl);
-var data = await response.json();
-console.log(data);
-    // .then(function (response) {
-    //   if (response.ok) {
-    //     console.log(response);
-    //     return response.json()
+  var newsGeoUrl = `https://api.worldnewsapi.com/geo-coordinates?api-key=${APIKey}&location=${encodeURIComponent(cityName)},${encodeURIComponent(countryName)}`
+  console.log(newsGeoUrl);
 
-    //   } else {
-    //     throw new error("Network response not okay");
-    //   }
-    // })
+  var response = await fetch(newsGeoUrl);
+  var data = await response.json();
+  console.log(data);
+  // .then(function (response) {
+  //   if (response.ok) {
+  //     console.log(response);
+  //     return response.json()
 
-    // .then(function (data) {
-    //   console.log(data);
-    //   latestNews(data)
-    // })
+  //   } else {
+  //     throw new error("Network response not okay");
+  //   }
+  // })
 
-    // .catch(function (error) {
-    //   console.error("fetch opeation failed, error.message");
-    //   alert("Unable to connect to location data, check spelling")
-    // });
-    createCallUrl();
+  // .then(function (data) {
+  //   console.log(data);
+  //   latestNews(data)
+  // })
+
+  // .catch(function (error) {
+  //   console.error("fetch opeation failed, error.message");
+  //   alert("Unable to connect to location data, check spelling")
+  // });
+  createCallUrl();
 };
 
 
@@ -132,7 +135,7 @@ function createCallUrl() {
   //query url is generated dynamically based on user request
   //inbuilt is the apikey, using teh language english, and the current date range to ensure current news
   var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en`;
- 
+
   //ecode URI cmponent ensures that the input is concatenated correctly to the URL
   //this uses teh input value of the keyword user input
   // if (keyword) {
@@ -157,10 +160,10 @@ function createCallUrl() {
 // This is the api call using the queryURL concatenated above from user input
 async function getDataApi(queryURL) {
 
-  var newsResponse= await fetch(queryURL)
+  var newsResponse = await fetch(queryURL)
   var newsData = await newsResponse.json();
   console.log(newsData);
-    
+
   // .then(function (response) {
   //     if (response.ok) {
   //       console.log(response);
