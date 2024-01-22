@@ -3,39 +3,39 @@ $('.ui.dropdown')
   .dropdown();
 
 //news associated variables
-var APIKey = "3d535884f42f455f9f5e3299842beecb";
+var APIKey = "2cae92b481154199a6636735fd71b0fc";
 var keywordInput = document.getElementById("keyword");
 var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
 var cityInput = document.getElementById("city");
-var publish = document.getElementById("publish-article"); 
+var publish = document.getElementById("publish-article");
 //getting the date from 7 days ago, in required parameter format, to keep news articles current
 
-function retrievePublishFromDate(){
-var currentDate = new Date();
-var lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
- 
-var day = lastWeekDate.getDate();
+function retrievePublishFromDate() {
+  var currentDate = new Date();
+  var lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-var month = lastWeekDate.getMonth()+1;
+  var day = lastWeekDate.getDate();
 
-var year = lastWeekDate.getFullYear();
+  var month = lastWeekDate.getMonth() + 1;
 
-var hour = lastWeekDate.getHours();
-var minute = lastWeekDate.getMinutes();
-var second = lastWeekDate.getSeconds();
+  var year = lastWeekDate.getFullYear();
 
-var publishedFromDate = `${year}-${month}-${day}${hour}:${minute}:${second}`
+  var hour = lastWeekDate.getHours();
+  var minute = lastWeekDate.getMinutes();
+  var second = lastWeekDate.getSeconds();
 
-return publishedFromDate;
+  var publishedFromDate = `${year}-${month}-${day}${hour}:${minute}:${second}`
+  // returns: Mon Jan 15 2024 11:33:03 GMT+1100 (Australian Eastern Daylight Time)
+  // requires: 2022-04-22 16:12:35
+  // format: YYYY-MM-DD TT:TT:TT
 
+  return publishedFromDate;
 }
 
-// returns: Mon Jan 15 2024 11:33:03 GMT+1100 (Australian Eastern Daylight Time)
-// requires: 2022-04-22 16:12:35
-// format: YYYY-MM-DD TT:TT:TT
+
 
 // event listener on the search button click
 searchBtn.addEventListener("click", handleSearchEvent);
@@ -45,7 +45,7 @@ function handleSearchEvent() {
   var cityName = cityInput.value.trim();
   var countryName = countryInput.value.trim();
   var radius = radiusInput.value;
- 
+
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
 
@@ -121,42 +121,43 @@ async function getGeoNewsApi(cityName, countryName, keyword, radius) {
   var lon = data.longitude;
   var lat = data.latitude;
 
-//   //BROKEN CODE
-//   // .then(function (response) {
-//   //   if (response.ok) {
-//   //     console.log(response);
-//   //     return response.json()
+  //   //BROKEN CODE
+  //   // .then(function (response) {
+  //   //   if (response.ok) {
+  //   //     console.log(response);
+  //   //     return response.json()
 
-//   //   } else {
-//   //     throw new error("Network response not okay");
-//   //   }
-//   // })
+  //   //   } else {
+  //   //     throw new error("Network response not okay");
+  //   //   }
+  //   // })
 
-//   // .then(function (data) {
-//   //   console.log(data);
-//   //   latestNews(data)
-//   // })
+  //   // .then(function (data) {
+  //   //   console.log(data);
+  //   //   latestNews(data)
+  //   // })
 
-//   // .catch(function (error) {
-//   //   console.error("fetch opeation failed, error.message");
-//   //   alert("Unable to connect to location data, check spelling")
-//   // });
+  //   // .catch(function (error) {
+  //   //   console.error("fetch opeation failed, error.message");
+  //   //   alert("Unable to connect to location data, check spelling")
+  //   // });
 
-//   //passing lat and lon, as well as keyword and radius into create URL function
-//   createCallUrl(lat, lon, keyword, radius);
+  //   //passing lat and lon, as well as keyword and radius into create URL function
+  createCallUrl(lat, lon, keyword, radius);
 };
 
 
 //getting the api string from the user input
 function createCallUrl(lat, lon, keyword, radius) {
-  //retrieve date from 7 days ago from function
-var publishFromDate = retrievePublishFromDate()
 
-  ;  //query url is generated dynamically based on user request
+  //retrieve date from 7 days ago from function
+  // var publishFromDate = retrievePublishFromDate()
+
+    ;  //query url is generated dynamically based on user request
   //inbuilt is the APIkey, using language english, limit return to 10 articles
   // and the current date range to ensure current news
-  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en&earliest-publish-date=${publishFromDate}&number=10`;
-console.log
+  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en`;
+
   // encodeURIComponent ensures that the input is concatenated correctly to the URL
   // this uses teh input value of the keyword user input
   if (keyword) {
@@ -171,7 +172,7 @@ console.log
     queryURL += `&location-filter=${lat},${lon}`
   };
 
-   //log what is being called 
+  //log what is being called 
   console.log(queryURL);
   //launch getDataAPi and pass in the queryURL
   getDataApi(queryURL);
@@ -181,11 +182,19 @@ console.log
 // This is the api call using the queryURL concatenated above from user input
 async function getDataApi(queryURL) {
 
-  var newsResponse = await fetch(queryURL)
+
+  var newsResponse = await fetch(queryURL, {
+    method: "GET",
+    mode: "cors",
+    credentials: "include",
+    headers: {
+        "Content-Type" : "application/json",
+    },
+});
   var newsData = await newsResponse.json();
   console.log(newsData);
 
-  var articles = {}
+  var articles = []
   publishArticles(articles)
   // .then(function (response) {
   //     if (response.ok) {
@@ -208,25 +217,25 @@ async function getDataApi(queryURL) {
   //   });
 };
 
-function publishArticles(articles){
-
-  for(var i=0; i<10; i++){
+function publishArticles(articles) {
+ 
+  for (var i = 0; i < (articles.length < 10 ? articles.length : 10); i ++) {
     //need to go through article response and see if it has key/article etc 
     // and how to retrieve/ publish that
-    var newLineDiv=document.createElement("ui container segment")
+    var newLineDiv = document.createElement("ui container segment")
     var articleTitle = document.createElement("href"); //does this need to be href? or add attribute
     var publishedDate = document.createElement("p");
     var articleSaveBtn = document.createElement("ui primary button");
-    
 
-    articleTitle.textContent="" //from object also needs href
-    publishedDate.textContent="" //from object
-    articleSaveBtn.name="Save" //button
+
+    articleTitle.textContent = "" //from object also needs href
+    publishedDate.textContent = "" //from object
+    articleSaveBtn.name = "Save" //button
 
     publish.appendChild(newLineDiv);
     newLineDiv.appendChild(publishedDate);
     newLineDiv.appendChild(articleTitle);
     newLineDiv.appendChild(articleSaveBtn);
-    
+
   }
 }
