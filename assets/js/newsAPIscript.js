@@ -10,6 +10,7 @@ var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
+var cityInput = document.getElementById("city");
 var publish = document.getElementById("publish-jobs");
 //getting the date from 7 days ago, in required parameter format, to keep news articles current
 
@@ -59,13 +60,6 @@ function handleSearchEvent() {
     return;
   }
 
- var countryCode = countryList.code("countryName")
-    // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
-    if (!countryCode) {
-        window.alert("Please enter a valid Country")
-        return
-    }
-    console.log(countryCode)
   // CANNOT FIND A CITY LIBRARY CURRENTLY future development
   // checking the if cityName input is VALID 
   // Using  validateCity function (below this) to do so (json library use)
@@ -80,7 +74,8 @@ function handleSearchEvent() {
     return;
   }
   // send this input over to create call url function
-  createCallUrl(keyword, cityName, countryName, radius);
+  getGeoNewsApi(cityName, countryName, keyword, radius);
+
 }
 
 //function for determining if the country is VALID (or correctly spelled)  usinng json library
@@ -99,6 +94,7 @@ function validateCountry(countryName) {
 
 //function for determining if the city is VALID (or correctly spelled)  usinng json library
 // cityName parameter has been parsed through handleSearchEvent where this function is used 
+
 // CANNOT FIND CITY LIBRARY
 function validateCity(cityName) {
   return true;  //LIBRARY CODE NOT WORKING- return true automatically for MVP
@@ -109,15 +105,52 @@ function validateCity(cityName) {
   // }
   // else {
   //   return true;}
+
+
 };
 
-  
-  
+//using the news API to create the geo lat and lon 
+// coordinates for the location filder in the main api call
+//FUNCTION FOR NEWS API
+async function getGeoNewsApi(cityName, countryName, keyword, radius) {
 
+  var newsGeoUrl = `https://api.worldnewsapi.com/geo-coordinates?api-key=${APIKey}&location=${encodeURIComponent(cityName)},${encodeURIComponent(countryName)}`
+
+
+  var response = await fetch(newsGeoUrl);
+  var data = await response.json();
+
+  var lon = data.longitude;
+  var lat = data.latitude;
+
+  //   //BROKEN CODE
+  //   // .then(function (response) {
+  //   //   if (response.ok) {
+  //   //     console.log(response);
+  //   //     return response.json()
+
+  //   //   } else {
+  //   //     throw new error("Network response not okay");
+  //   //   }
+  //   // })
+
+  //   // .then(function (data) {
+  //   //   console.log(data);
+  //   //   latestNews(data)
+  //   // })
+
+  //   // .catch(function (error) {
+  //   //   console.error("fetch opeation failed, error.message");
+  //   //   alert("Unable to connect to location data, check spelling")
+  //   // });
+
+  //   //passing lat and lon, as well as keyword and radius into create URL function
+  createCallUrl(lat, lon, keyword, radius);
+};
 
 
 //getting the api string from the user input
-function createCallUrl(keyword, cityName, countryName, radius) {
+function createCallUrl(lat, lon, keyword, radius) {
 
   //retrieve date from 7 days ago from function
   // var publishFromDate = retrievePublishFromDate()
