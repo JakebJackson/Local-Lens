@@ -213,18 +213,20 @@ function publishArticles(articles){
   for(var i=0; i<10; i++){
     //need to go through article response and see if it has key/article etc 
     // and how to retrieve/ publish that
-    var newLineDive=document.createElement("div")
-    var articleTitle = document.createElement("href");
+    var newLineDiv=document.createElement("ui container segment")
+    var articleTitle = document.createElement("href"); //does this need to be href? or add attribute
     var publishedDate = document.createElement("p");
     var articleSaveBtn = document.createElement("ui primary button");
+    
 
     articleTitle.textContent="" //from object also needs href
     publishedDate.textContent="" //from object
     articleSaveBtn.name="Save" //button
 
-    publish.appendChild(publishedDate);
-    publish.appendChild(articleTitle);
-    publish.appendChild(articleSaveBtn);
+    publish.appendChild(newLineDiv);
+    newLineDiv.appendChild(publishedDate);
+    newLineDiv.appendChild(articleTitle);
+    newLineDiv.appendChild(articleSaveBtn);
     
   }
 }
