@@ -3,8 +3,7 @@ $('.ui.dropdown')
   .dropdown();
 
 //news associated variables
-var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
-var applicationID ="89225970"
+var APIKey = "3d535884f42f455f9f5e3299842beecb";
 var keywordInput = document.getElementById("keyword");
 var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
@@ -123,26 +122,7 @@ async function getGeoNewsApi(cityName, countryName, keyword, radius) {
   var lon = data.longitude;
   var lat = data.latitude;
 
-  //   //BROKEN CODE
-  //   // .then(function (response) {
-  //   //   if (response.ok) {
-  //   //     console.log(response);
-  //   //     return response.json()
 
-  //   //   } else {
-  //   //     throw new error("Network response not okay");
-  //   //   }
-  //   // })
-
-  //   // .then(function (data) {
-  //   //   console.log(data);
-  //   //   latestNews(data)
-  //   // })
-
-  //   // .catch(function (error) {
-  //   //   console.error("fetch opeation failed, error.message");
-  //   //   alert("Unable to connect to location data, check spelling")
-  //   // });
 
   //   //passing lat and lon, as well as keyword and radius into create URL function
   createCallUrl(lat, lon, keyword, radius);
@@ -155,7 +135,7 @@ function createCallUrl(lat, lon, keyword, radius) {
   //retrieve date from 7 days ago from function
   // var publishFromDate = retrievePublishFromDate()
 
-    ;  //query url is generated dynamically based on user request
+  ;  //query url is generated dynamically based on user request
   //inbuilt is the APIkey, using language english, limit return to 10 articles
   // and the current date range to ensure current news
   var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en`;
@@ -183,45 +163,14 @@ function createCallUrl(lat, lon, keyword, radius) {
 
 // This is the api call using the queryURL concatenated above from user input
 async function getDataApi(queryURL) {
-
-
-  var newsResponse = await fetch(queryURL, {
-    method: "GET",
-    mode: "cors",
-    credentials: "include",
-    headers: {
-        "Content-Type" : "application/json",
-    },
-});
+  var newsResponse = await fetch(queryURL)
   var newsData = await newsResponse.json();
   console.log(newsData);
-
-  var articles = []
-  publishArticles(articles)
-  // .then(function (response) {
-  //     if (response.ok) {
-  //       console.log(response);
-  //       return response.json()
-
-  //     } else {
-  //       throw new error("Network response not okay");
-  //     }
-  //   })
-
-  //   .then(function (data) {
-  //     console.log(data);
-  //     latestNews(data)
-  //   })
-
-  //   .catch(function (error) {
-  //     console.error("fetch opeation failed, error.message");
-  //     alert("Unable to connect to headlines, try again later")
-  //   });
 };
 
 function publishArticles(articles) {
- 
-  for (var i = 0; i < (articles.length < 10 ? articles.length : 10); i ++) {
+
+  for (var i = 0; i < (articles.length < 10 ? articles.length : 10); i++) {
     //need to go through article response and see if it has key/article etc 
     // and how to retrieve/ publish that
     var newLineDiv = document.createElement("ui container segment")

@@ -21,7 +21,7 @@ function handleSearchEvent() {
   var cityName = cityInput.value.trim();
   var countryName = countryInput.value.trim();
   var radius = radiusInput.value;
-  var countryCode = countryList.code(countryName); //gets country ISO from JSON library
+  var countryCode = (countryList.code(countryName)).toLowerCase(); //gets country ISO from JSON library
 
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
@@ -35,7 +35,6 @@ function handleSearchEvent() {
     return;
   }
 
-  var countryCode = countryList.code("countryName")
   // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
   if (!countryName) {
     window.alert("Please enter a valid Country")
@@ -97,7 +96,7 @@ function createCallUrl(countryCode, keyword, cityName, countryName, radius) {
   //query url is generated dynamically based on user request
   //inbuilt is the APIkey, using language english, limit return to 10 articles
   // and the current date range to ensure current news
-  var queryURL = `https://api.adzuna.com/v1/api/jobs${countryCode}/search/1?app_id=${applicationID}&app_key=${APIKey}&results_per_page=10`;
+  var queryURL = `https://api.adzuna.com/v1/api/jobs/${countryCode}/search/1?app_id=${applicationID}&app_key=${APIKey}&results_per_page=10`;
 
   // encodeURIComponent ensures that the input is concatenated correctly to the URL
   // this uses teh input value of the keyword user input
@@ -122,13 +121,10 @@ function createCallUrl(countryCode, keyword, cityName, countryName, radius) {
 async function getDataApi(queryURL) {
 
 
-  var jobsResponse = await fetch(queryURL)
- 
-  var jobsData = await jobsResponse.json();
+  var jobsResponse = await fetch(queryURL);
+   var jobsData = await jobsResponse.json();
   console.log(jobsData);
-
-  var articles = []
-  publishArticles(articles)
+  
 };
 
 function publishArticles(articles) {
