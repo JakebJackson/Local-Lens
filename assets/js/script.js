@@ -9,21 +9,33 @@ var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
+var cityInput = document.getElementById("city");
+var publish = document.getElementById("publish-article"); 
+//getting the date from 7 days ago, in required parameter format, to keep news articles current
 
-//getting the date from 7 days ago, to keep news articles current
+function retrievePublishFromDate(){
 var currentDate = new Date();
 var lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-console.log(lastWeekDate);
+ 
+var day = lastWeekDate.getDate();
 
+var month = lastWeekDate.getMonth()+1;
 
-// Parameters:
-// [number]
-// [text]
-// [sort-direction] ASC or DESC
-// [location-filter] - latitude, longitude, radius
+var year = lastWeekDate.getFullYear();
 
-// error code 402 for call limit
-// error code 429 for exceeding 60 requests
+var hour = lastWeekDate.getHours();
+var minute = lastWeekDate.getMinutes();
+var second = lastWeekDate.getSeconds();
+
+var publishedFromDate = `${year}-${month}-${day}${hour}:${minute}:${second}`
+
+return publishedFromDate;
+
+}
+
+// returns: Mon Jan 15 2024 11:33:03 GMT+1100 (Australian Eastern Daylight Time)
+// requires: 2022-04-22 16:12:35
+// format: YYYY-MM-DD TT:TT:TT
 
 // event listener on the search button click
 searchBtn.addEventListener("click", handleSearchEvent);
@@ -33,7 +45,7 @@ function handleSearchEvent() {
   var cityName = cityInput.value.trim();
   var countryName = countryInput.value.trim();
   var radius = radiusInput.value;
-
+ 
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
 
@@ -51,17 +63,17 @@ function handleSearchEvent() {
   // checking the if cityName input is VALID 
   // Using  validateCity function (below this) to do so (json library use)
   validateCity(cityName);
-  
+
   //if it returns false from  validateCity function we have an alert
   // and our function returns ie STOPS
-  var isCityValid =  validateCity(cityName);
+  var isCityValid = validateCity(cityName);
 
   if (!isCityValid) {
     alert("invalid city, please enter a valid city or check spelling")
     return;
   }
   // send this input over to create call url function
-  getGeoNewsApi(cityName, countryName);
+  getGeoNewsApi(cityName, countryName, keyword, radius);
 
 }
 
@@ -83,7 +95,7 @@ function validateCountry(countryName) {
 // cityName parameter has been parsed through handleSearchEvent where this function is used 
 
 // CANNOT FIND CITY LIBRARY
-function  validateCity(cityName) {
+function validateCity(cityName) {
   return true;  //LIBRARY CODE NOT WORKING- return true automatically for MVP
   // var cityList = city.names();
 
@@ -92,65 +104,74 @@ function  validateCity(cityName) {
   // }
   // else {
   //   return true;}
-  
-   
+
+
 };
 
 //using the news API to create the geo lat and lon 
 // coordinates for the location filder in the main api call
-async function getGeoNewsApi(cityName, countryName) {
+async function getGeoNewsApi(cityName, countryName, keyword, radius) {
 
   var newsGeoUrl = `https://api.worldnewsapi.com/geo-coordinates?api-key=${APIKey}&location=${encodeURIComponent(cityName)},${encodeURIComponent(countryName)}`
-  console.log(newsGeoUrl);
+
 
   var response = await fetch(newsGeoUrl);
   var data = await response.json();
-  console.log(data);
-  // .then(function (response) {
-  //   if (response.ok) {
-  //     console.log(response);
-  //     return response.json()
 
-  //   } else {
-  //     throw new error("Network response not okay");
-  //   }
-  // })
+  var lon = data.longitude;
+  var lat = data.latitude;
 
-  // .then(function (data) {
-  //   console.log(data);
-  //   latestNews(data)
-  // })
+//   //BROKEN CODE
+//   // .then(function (response) {
+//   //   if (response.ok) {
+//   //     console.log(response);
+//   //     return response.json()
 
-  // .catch(function (error) {
-  //   console.error("fetch opeation failed, error.message");
-  //   alert("Unable to connect to location data, check spelling")
-  // });
-  createCallUrl();
+//   //   } else {
+//   //     throw new error("Network response not okay");
+//   //   }
+//   // })
+
+//   // .then(function (data) {
+//   //   console.log(data);
+//   //   latestNews(data)
+//   // })
+
+//   // .catch(function (error) {
+//   //   console.error("fetch opeation failed, error.message");
+//   //   alert("Unable to connect to location data, check spelling")
+//   // });
+
+//   //passing lat and lon, as well as keyword and radius into create URL function
+//   createCallUrl(lat, lon, keyword, radius);
 };
 
 
 //getting the api string from the user input
-function createCallUrl() {
+function createCallUrl(lat, lon, keyword, radius) {
+  //retrieve date from 7 days ago from function
+var publishFromDate = retrievePublishFromDate()
 
-  //query url is generated dynamically based on user request
-  //inbuilt is the apikey, using teh language english, and the current date range to ensure current news
-  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en`;
+  ;  //query url is generated dynamically based on user request
+  //inbuilt is the APIkey, using language english, limit return to 10 articles
+  // and the current date range to ensure current news
+  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en&earliest-publish-date=${publishFromDate}&number=10`;
+console.log
+  // encodeURIComponent ensures that the input is concatenated correctly to the URL
+  // this uses teh input value of the keyword user input
+  if (keyword) {
+    queryURL += `&text=${encodeURIComponent(keyword)}`;
+  }
 
-  //ecode URI cmponent ensures that the input is concatenated correctly to the URL
-  //this uses teh input value of the keyword user input
-  // if (keyword) {
-  //   queryURL += `&text=${encodeURIComponent(keyword)}`;
-  // }
+  //ecode URI component ensures that the input is concatenated correctly to the URL
+  //this uses the input value of the radius user input as well as the lat and lon from the google map function
+  if (radius) {
+    queryURL += `&location-filter=${lat},${lon},${encodeURIComponent(radius)}`
+  } else if (lat, lon) {
+    queryURL += `&location-filter=${lat},${lon}`
+  };
 
-  //  //ecode URI component ensures that the input is concatenated correctly to the URL
-  // //this uses the input value of the radius user input as well as the lat and lon from the google map function
-  // if (radius) {
-  //   queryURL += `&location-filter=${lat},${lon},${encodeURIComponent(radius)}`
-  // } else {
-  //   queryURL += `&location-filter=${lat, lon}`
-  // };
-
-  //log what is being called 
+   //log what is being called 
   console.log(queryURL);
   //launch getDataAPi and pass in the queryURL
   getDataApi(queryURL);
@@ -164,6 +185,8 @@ async function getDataApi(queryURL) {
   var newsData = await newsResponse.json();
   console.log(newsData);
 
+  var articles = {}
+  publishArticles(articles)
   // .then(function (response) {
   //     if (response.ok) {
   //       console.log(response);
@@ -185,3 +208,23 @@ async function getDataApi(queryURL) {
   //   });
 };
 
+function publishArticles(articles){
+
+  for(var i=0; i<10; i++){
+    //need to go through article response and see if it has key/article etc 
+    // and how to retrieve/ publish that
+    var newLineDive=document.createElement("div")
+    var articleTitle = document.createElement("href");
+    var publishedDate = document.createElement("p");
+    var articleSaveBtn = document.createElement("ui primary button");
+
+    articleTitle.textContent="" //from object also needs href
+    publishedDate.textContent="" //from object
+    articleSaveBtn.name="Save" //button
+
+    publish.appendChild(publishedDate);
+    publish.appendChild(articleTitle);
+    publish.appendChild(articleSaveBtn);
+    
+  }
+}
