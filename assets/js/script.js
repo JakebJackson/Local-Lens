@@ -4,7 +4,7 @@ $('.ui.dropdown')
 
 //news associated variables
 var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
-var applicationID ="89225970"
+var applicationID = "89225970"
 var keywordInput = document.getElementById("keyword");
 var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
@@ -12,30 +12,6 @@ var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
 var publish = document.getElementById("publish-jobs");
 //getting the date from 7 days ago, in required parameter format, to keep news articles current
-
-function retrievePublishFromDate() {
-  var currentDate = new Date();
-  var lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-  var day = lastWeekDate.getDate();
-
-  var month = lastWeekDate.getMonth() + 1;
-
-  var year = lastWeekDate.getFullYear();
-
-  var hour = lastWeekDate.getHours();
-  var minute = lastWeekDate.getMinutes();
-  var second = lastWeekDate.getSeconds();
-
-  var publishedFromDate = `${year}-${month}-${day}${hour}:${minute}:${second}`
-  // returns: Mon Jan 15 2024 11:33:03 GMT+1100 (Australian Eastern Daylight Time)
-  // requires: 2022-04-22 16:12:35
-  // format: YYYY-MM-DD TT:TT:TT
-
-  return publishedFromDate;
-}
-
-
 
 // event listener on the search button click
 searchBtn.addEventListener("click", handleSearchEvent);
@@ -45,10 +21,10 @@ function handleSearchEvent() {
   var cityName = cityInput.value.trim();
   var countryName = countryInput.value.trim();
   var radius = radiusInput.value;
+  var countryCode = countryList.code(countryName); //gets country ISO from JSON library
 
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
-
   validateCountry(countryName);
   //if it returns false from validateCountry function we have an alert
   // and our function returns ie STOPS
@@ -59,13 +35,12 @@ function handleSearchEvent() {
     return;
   }
 
- var countryCode = countryList.code("countryName")
-    // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
-    if (!countryCode) {
-        window.alert("Please enter a valid Country")
-        return
-    }
-    console.log(countryCode)
+  var countryCode = countryList.code("countryName")
+  // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
+  if (!countryName) {
+    window.alert("Please enter a valid Country")
+    return
+  }
   // CANNOT FIND A CITY LIBRARY CURRENTLY future development
   // checking the if cityName input is VALID 
   // Using  validateCity function (below this) to do so (json library use)
@@ -80,7 +55,7 @@ function handleSearchEvent() {
     return;
   }
   // send this input over to create call url function
-  createCallUrl(keyword, cityName, countryName, radius);
+  createCallUrl(countryCode, keyword, cityName, countryName, radius);
 }
 
 //function for determining if the country is VALID (or correctly spelled)  usinng json library
@@ -111,34 +86,29 @@ function validateCity(cityName) {
   //   return true;}
 };
 
-  
-  
+
+
 
 
 
 //getting the api string from the user input
-function createCallUrl(keyword, cityName, countryName, radius) {
+function createCallUrl(countryCode, keyword, cityName, countryName, radius) {
 
-  //retrieve date from 7 days ago from function
-  // var publishFromDate = retrievePublishFromDate()
-
-    ;  //query url is generated dynamically based on user request
+  //query url is generated dynamically based on user request
   //inbuilt is the APIkey, using language english, limit return to 10 articles
   // and the current date range to ensure current news
-  var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}&language=en`;
+  var queryURL = `https://api.adzuna.com/v1/api/jobs${countryCode}/search/1?app_id=${applicationID}&app_key=${APIKey}&results_per_page=10`;
 
   // encodeURIComponent ensures that the input is concatenated correctly to the URL
   // this uses teh input value of the keyword user input
   if (keyword) {
-    queryURL += `&text=${encodeURIComponent(keyword)}`;
+    queryURL += `&what=${encodeURIComponent(keyword)}`;
   }
 
   //ecode URI component ensures that the input is concatenated correctly to the URL
   //this uses the input value of the radius user input as well as the lat and lon from the google map function
   if (radius) {
-    queryURL += `&location-filter=${lat},${lon},${encodeURIComponent(radius)}`
-  } else if (lat, lon) {
-    queryURL += `&location-filter=${lat},${lon}`
+    queryURL += `&distance=${encodeURIComponent(radius)}`
   };
 
   //log what is being called 
@@ -152,43 +122,18 @@ function createCallUrl(keyword, cityName, countryName, radius) {
 async function getDataApi(queryURL) {
 
 
-  var newsResponse = await fetch(queryURL, {
-    method: "GET",
-    mode: "cors",
-    credentials: "include",
-    headers: {
-        "Content-Type" : "application/json",
-    },
-});
-  var newsData = await newsResponse.json();
-  console.log(newsData);
+  var jobsResponse = await fetch(queryURL)
+ 
+  var jobsData = await jobsResponse.json();
+  console.log(jobsData);
 
   var articles = []
   publishArticles(articles)
-  // .then(function (response) {
-  //     if (response.ok) {
-  //       console.log(response);
-  //       return response.json()
-
-  //     } else {
-  //       throw new error("Network response not okay");
-  //     }
-  //   })
-
-  //   .then(function (data) {
-  //     console.log(data);
-  //     latestNews(data)
-  //   })
-
-  //   .catch(function (error) {
-  //     console.error("fetch opeation failed, error.message");
-  //     alert("Unable to connect to headlines, try again later")
-  //   });
 };
 
 function publishArticles(articles) {
- 
-  for (var i = 0; i < (articles.length < 10 ? articles.length : 10); i ++) {
+
+  for (var i = 0; i < (articles.length < 10 ? articles.length : 10); i++) {
     //need to go through article response and see if it has key/article etc 
     // and how to retrieve/ publish that
     var newLineDiv = document.createElement("ui container segment")
