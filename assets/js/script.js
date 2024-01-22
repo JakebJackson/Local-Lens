@@ -3,15 +3,19 @@ $('.ui.dropdown')
   .dropdown();
 
 // Basic global variables for use in functions (subject to change most of these are for testing.)
-var userLat = -37.803065906344806;
-var userLon = 144.9743971087161;
 var markerLat;
 var markerLon;
 var userZoom = 10;
 var map;
 var geocoder;
+var userLatLng;
+var chosenCity;
+var chosenCountry;
 
 var searchBtn = $('#search-btn');
+
+// Calls the initMap function.
+initMap();
 
 // Initialise map function, uses async prefix to ensure that it loads as the page loads.
 async function initMap() {
@@ -21,7 +25,7 @@ async function initMap() {
   // Map generated to the map variable and is shown in the #map HTML div
   map = new Map(document.getElementById("map"), {
     // 'center:' command is used to move the display port to the specified latitude and longitude, I currently have these set to variables for dynamic use.
-    center: { lat: userLat, lng: userLon },
+    center: { lat: -37.803065906344806, lng: 144.9743971087161 },
     // 'zoom' command is also set to a variable for future dynamic use, this is subject to change.
     zoom: userZoom,
     mapTypeId: "roadmap",
@@ -34,10 +38,14 @@ async function initMap() {
   marker = new google.maps.Marker({
     map,
   });
-
+  
   // EVEMT LISTENER WHEN MAP IS CLICKED
-  map.addListener("click", (e) => {
+  map.addListener('click', (e) => {
+    // Location refers to the webpage, e to the event (click) and latLang to call the latitude/longitude.
     geocode({ location: e.latLng });
+    userLatLng = JSON.parse(JSON.stringify(e.latLng.toJSON(), null, 2));
+
+    geocodeLatLng(geocoder, map);
   });
   return map;
 }
@@ -60,41 +68,57 @@ function geocode(request) {
     });
 }
 
+function geocodeLatLng(geocoder, map) {
+
+  geocoder
+    .geocode({ location: userLatLng })
+    .then((response) => {
+      if (response.results[0]) {
+        map.setZoom(11);
+
+        clickEvent = response.results[1];
+
+        if (clickEvent.address_components.length == 7) {
+          chosenCity = clickEvent.address_components[2].long_name;
+          chosenCountry = clickEvent.address_components[5].short_name;
+        } else if (clickEvent.address_components.length > 7) {
+          cityIndex = clickEvent.address_components.length - 5;
+          countryIndex = clickEvent.address_components.length - 2;
+          chosenCity = clickEvent.address_components[cityIndex].long_name;
+          chosenCountry = clickEvent.address_components[countryIndex].short_name;
+        } else {
+          cityIndex = -5 + clickEvent.address_components.length;
+          countryIndex = -2 + clickEvent.address_components.length; 
+          chosenCity = clickEvent.address_components[cityIndex].long_name;
+          chosenCountry = clickEvent.address_components[countryIndex].short_name;
+        }
+
+        console.log(chosenCity);
+        console.log(chosenCountry);
+      } else {
+        window.alert("No results found");
+      }
+    })
+    .catch((e) => window.alert("Geocoder failed due to: " + e));
+}
+
 // This function is called when the search button is clicked by the user.
 async function markerTest() {
 
   // These will be dynamic variables but are hard coded for now due to testing.
-  markerLat = -37.65779823117258;
-  markerLon = 144.59184743120363;
-
-  var markerLat2 = -37.634760969408376;
-  var markerLon2 = 145.023630480613;
+  markerLat = userLatLng.lat;
+  markerLon = userLatLng.lng;
 
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   // Creates a new map marker 
   const marker = new AdvancedMarkerElement({
     map: map,
     position: { lat: markerLat, lng: markerLon},
-    title: "House",
+    title: "Selected Area",
   });
 
   // Logs marker created.
   console.log("Marker created");
-
-  // Creates a div in the map element, used to display the marker.
-  const housePrice1 = document.createElement("div");
-
-  // Adds 'price-tag' class to the div created above.
-  housePrice1.className = "price-tag";
-  // Sets text content of the div created above.
-  housePrice1.textContent = "Epping, House, $725K";
-
-  // Creates a new marker with the relevant input to display on the map.
-  const marker2 = new AdvancedMarkerElement({
-    map,
-    position: { lat: markerLat2, lng: markerLon2 },
-    content: housePrice1,
-  });
 }
 
 // AUTO COMPLETE CODE
@@ -106,6 +130,7 @@ const defaultBounds = {
   east: center.lng + 0.1,
   west: center.lng - 0.1,
 };
+
 const input = document.getElementById("pac-input");
 const options = {
   bounds: defaultBounds,
@@ -114,32 +139,3 @@ const options = {
   strictBounds: false,
 };
 const autocomplete = new google.maps.places.Autocomplete(input, options);
-
-// Calls the initMap function.
-initMap();
-
-
-// Saving user input variables from the HTML input.
-
-// Using saved variables to talk to the Geocode API, this should generate a map on the page that shows the selected area by the user (example if user inputs postcode 3337 the map will show melton.)
-
-// Using saved variables to get property listing information from the domain portal API to generate markers on the geocode API showing where available properties are within the user-specified area.
-
-// Use returned results from the Domain portal API to display the returned listings in a HTML container below the map for more in-depth information. This should respond to when the user clicks on the map markers and shows the corresponding property. (HTML <map> elements might be useful here.)
-
-// A 'Save Insight' button on selected listings to save the listing to localstorage and generate later in the saved-insights page.
-
-// localstorage.getItem() logic for loading the users saved insights the saved-insights page on load.
-
-
-
-// API INTEGRATION IDEAS:
-
-// Currency exchange API for a travel planner.
-// Calender API could also be useful for mapping travel planners.
-// Dictionary API, gets local languages from a map marker and common phrases that might help the user out in a pinch.
-// Air quality of china API?
-// Health API for checking if certain areas have prominent diseases/outbreaks.
-// Job searcher for jobs in the area.
-// NEWS API for recent stories in the area.
-// Imagery API for generating photos of an area you might want to include in a travel planner.
