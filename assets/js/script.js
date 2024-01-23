@@ -3,15 +3,19 @@ $('.ui.dropdown')
   .dropdown();
 
 // Basic global variables for use in functions (subject to change most of these are for testing.)
-var userLat = -37.803065906344806;
-var userLon = 144.9743971087161;
 var markerLat;
 var markerLon;
 var userZoom = 10;
 var map;
 var geocoder;
+var userLatLng;
+var chosenCity;
+var chosenCountry;
 
 var searchBtn = $('#search-btn');
+
+// Calls the initMap function.
+initMap();
 
 // Initialise map function, uses async prefix to ensure that it loads as the page loads.
 async function initMap() {
@@ -21,7 +25,7 @@ async function initMap() {
   // Map generated to the map variable and is shown in the #map HTML div
   map = new Map(document.getElementById("map"), {
     // 'center:' command is used to move the display port to the specified latitude and longitude, I currently have these set to variables for dynamic use.
-    center: { lat: userLat, lng: userLon },
+    center: { lat: -37.803065906344806, lng: 144.9743971087161 },
     // 'zoom' command is also set to a variable for future dynamic use, this is subject to change.
     zoom: userZoom,
     mapTypeId: "roadmap",
@@ -34,10 +38,14 @@ async function initMap() {
   marker = new google.maps.Marker({
     map,
   });
-
+  
   // EVEMT LISTENER WHEN MAP IS CLICKED
-  map.addListener("click", (e) => {
+  map.addListener('click', (e) => {
+    // Location refers to the webpage, e to the event (click) and latLang to call the latitude/longitude.
     geocode({ location: e.latLng });
+    userLatLng = JSON.parse(JSON.stringify(e.latLng.toJSON(), null, 2));
+
+    geocodeLatLng(geocoder, map);
   });
   return map;
 }
@@ -60,41 +68,57 @@ function geocode(request) {
     });
 }
 
+function geocodeLatLng(geocoder, map) {
+
+  geocoder
+    .geocode({ location: userLatLng })
+    .then((response) => {
+      if (response.results[0]) {
+        map.setZoom(11);
+
+        clickEvent = response.results[1];
+
+        if (clickEvent.address_components.length == 7) {
+          chosenCity = clickEvent.address_components[2].long_name;
+          chosenCountry = clickEvent.address_components[5].short_name;
+        } else if (clickEvent.address_components.length > 7) {
+          cityIndex = clickEvent.address_components.length - 5;
+          countryIndex = clickEvent.address_components.length - 2;
+          chosenCity = clickEvent.address_components[cityIndex].long_name;
+          chosenCountry = clickEvent.address_components[countryIndex].short_name;
+        } else {
+          cityIndex = -5 + clickEvent.address_components.length;
+          countryIndex = -2 + clickEvent.address_components.length; 
+          chosenCity = clickEvent.address_components[cityIndex].long_name;
+          chosenCountry = clickEvent.address_components[countryIndex].short_name;
+        }
+
+        console.log(chosenCity);
+        console.log(chosenCountry);
+      } else {
+        window.alert("No results found");
+      }
+    })
+    .catch((e) => window.alert("Geocoder failed due to: " + e));
+}
+
 // This function is called when the search button is clicked by the user.
 async function markerTest() {
 
   // These will be dynamic variables but are hard coded for now due to testing.
-  markerLat = -37.65779823117258;
-  markerLon = 144.59184743120363;
-
-  var markerLat2 = -37.634760969408376;
-  var markerLon2 = 145.023630480613;
+  markerLat = userLatLng.lat;
+  markerLon = userLatLng.lng;
 
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   // Creates a new map marker 
   const marker = new AdvancedMarkerElement({
     map: map,
     position: { lat: markerLat, lng: markerLon},
-    title: "House",
+    title: "Selected Area",
   });
 
   // Logs marker created.
   console.log("Marker created");
-
-  // Creates a div in the map element, used to display the marker.
-  const housePrice1 = document.createElement("div");
-
-  // Adds 'price-tag' class to the div created above.
-  housePrice1.className = "price-tag";
-  // Sets text content of the div created above.
-  housePrice1.textContent = "Epping, House, $725K";
-
-  // Creates a new marker with the relevant input to display on the map.
-  const marker2 = new AdvancedMarkerElement({
-    map,
-    position: { lat: markerLat2, lng: markerLon2 },
-    content: housePrice1,
-  });
 }
 
 // AUTO COMPLETE CODE
@@ -106,6 +130,7 @@ const defaultBounds = {
   east: center.lng + 0.1,
   west: center.lng - 0.1,
 };
+
 const input = document.getElementById("pac-input");
 const options = {
   bounds: defaultBounds,
@@ -115,54 +140,150 @@ const options = {
 };
 const autocomplete = new google.maps.places.Autocomplete(input, options);
 
-// Calls the initMap function.
-initMap();
+//news associated variables
+var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
+var applicationID = "89225970";
+var keywordInput = document.getElementById("keyword");
+var cityInput = document.getElementById("city");
+var countryInput = document.getElementById("country");
+var radiusInput = document.getElementById("radius");
+var searchBtn = document.getElementById("search-btn");
+var publish = document.getElementById("publish-article"); 
+var publish = document.getElementById("publish-jobs");
+var jobsData; //establishing global variable for API call
 
-var APIKey = "3d535884f42f455f9f5e3299842beecb";
-var keywordInput= document.getElementById("keyword");
-var radiusInput= document.getElementById("radius");
+//getting the date from 7 days ago, in required parameter format, to keep news articles current
 
+// event listener on the search button click
+searchBtn.addEventListener("click", handleSearchEvent);
 
-// Parameters:
-// [number]
-// [text]
-// [sort-direction] ASC or DESC
-// [location-filter] - latitude, longitude, radius
+function handleSearchEvent() {
+  var keyword = keywordInput.value.trim();
+  var cityName = cityInput.value.trim();
+  var countryName = countryInput.value.trim();
+  var radius = radiusInput.value;
+  var countryCode = (countryList.code(countryName)).toLowerCase(); //gets country ISO from JSON library
 
-// error code 402 for call limit
-// error code 429 for exceeding 60 requests
+  // checking the if countryName input is VALID 
+  // Using validateCountry function (below this) to do so (json library use)
+  validateCountry(countryName);
+  //if it returns false from validateCountry function we have an alert
+  // and our function returns ie STOPS
+  var isCountryValid = validateCountry(countryName);
 
-//getting the api string from the user input
-function createCallIUrl(lat, lon) {
+  if (!isCountryValid) {
+    alert("invalid country, please enter a valid country or check spelling")
+    return;
+  }
+  
+  // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
+  if (!countryName) {
+    window.alert("Please enter a valid Country")
+    return
+  }
+  
+  // CANNOT FIND A CITY LIBRARY CURRENTLY future development
+  // checking the if cityName input is VALID 
+  // Using  validateCity function (below this) to do so (json library use)
+  validateCity(cityName);
 
-    var queryURL = `https://api.worldnewsapi.com/search-news?api-key=${APIKey}`;
+  //if it returns false from  validateCity function we have an alert
+  // and our function returns ie STOPS
+  var isCityValid = validateCity(cityName);
 
-    if (keywordInput.value) {
-        queryURL += `&text=${keywordInput}`;
-    }
-
-    if (radiusInput.value) {
-        queryURL += `&location-filter=${lat, lon, radiusInput}`
-    } else {
-        queryURL += `&location-filter=${lat, lon}`
-    };
+  if (!isCityValid) {
+    alert("invalid city, please enter a valid city or check spelling")
+    return;
+  }
+  // send this input over to create call url function
+  createCallUrl(countryCode, keyword, cityName, radius);
 }
 
-function getDataApi(queryURL) {
+//function for determining if the country is VALID (or correctly spelled)  usinng json library
+// countryName parameter has been parsed through handleSearchEvent where this function is used 
+function validateCountry(countryName) {
+  return true;  //LIBRARY CODE NOT WORKING- return true automatically for MVP
+  // var countryList = country.names();
 
-    fetch(queryURL)
-        .then(function (response) {
-            if (response.ok) {
-                console.log(response);
-                response.json().then(function (data) {
-                    console.log(data);
-                    latestNews(data) 
-                });
-            } else {
-                alert("Error"+ response.statusText);
-            }
-        })
-        .catch(function (error){
-            alert("Unable to connect to headlines, try again later")
-        });
-    };
+  // if (!countryList.includes(countryName)) {
+  //   return false;
+  // }
+  // else {
+  //   return true;
+  // }
+};
+
+//function for determining if the city is VALID (or correctly spelled)  usinng json library
+// cityName parameter has been parsed through handleSearchEvent where this function is used 
+// CANNOT FIND CITY LIBRARY
+function validateCity(cityName) {
+  return true;  //LIBRARY CODE NOT WORKING- return true automatically for MVP
+  // var cityList = city.names();
+
+  // if (!cityList.includes(cityName)) {
+  //   return false;
+  // }
+  // else {
+  //   return true;}
+};
+
+
+
+
+
+
+//getting the api string from the user input
+function createCallUrl(countryCode, keyword, cityName, radius) {
+
+  //query url is generated dynamically based on user request
+  //inbuilt is the APIkey, using language english, limit return to 10 articles
+  // and the current date range to ensure current news
+  var queryURL = `https://api.adzuna.com/v1/api/jobs/${countryCode}/search/1?app_id=${applicationID}&app_key=${APIKey}&results_per_page=10`;
+
+  // encodeURIComponent ensures that the input is concatenated correctly to the URL
+  // this uses teh input value of the keyword user input
+  if (keyword) {
+    queryURL += `&what=${encodeURIComponent(keyword)}`;
+  }
+
+  if (cityName) {
+    queryURL += `&where=${encodeURIComponent(cityName)}`;
+  }
+  //ecode URI component ensures that the input is concatenated correctly to the URL
+  //this uses the input value of the radius user input as well as the lat and lon from the google map function
+  if (radius) {
+    queryURL += `&distance=${encodeURIComponent(radius)}`
+  };
+
+  //log what is being called 
+  console.log(queryURL);
+  //launch getDataAPi and pass in the queryURL
+  getDataApi(queryURL);
+}
+
+// This is the api call using the queryURL concatenated above from user input
+async function getDataApi(queryURL) {
+  var jobsResponse = await fetch(queryURL);
+  jobsData = await jobsResponse.json();
+  publishArticles(jobsData)
+  // if there are no jobs returned set an alert
+  if (!jobsData.results == 0) { alert("no jobs for this search, please try again") };
+  console.log("jobsData=", jobsData) //to check data is coming through
+};
+
+// get data from api call
+function publishArticles(jobsData) {
+
+  var searchResults = jobsData.results;
+
+
+  for (var i = 0; i < (searchResults.length); i++) {
+
+    var company = searchResults[i].company.display_name || "n/a";
+    var dateCreated = searchResults[i].created || "n/a";
+    var jobDescription = searchResults[i].description || "n/a";
+    var jobTitle = searchResults[i].title || "n/a";
+    console.log("publishedArticlesData=", company, dateCreated, jobDescription, jobTitle);
+
+  }
+};
