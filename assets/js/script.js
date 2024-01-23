@@ -2,6 +2,11 @@
 $('.ui.dropdown')
   .dropdown();
 
+$('.mini.modal')
+  .modal()
+  ;
+
+
 // JOBS API VARS
 var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
 var applicationID = "89225970";
@@ -38,6 +43,11 @@ if (localStorage.getItem("savedNum") != null) {
   savedNum = 0
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  // Your function or code here
+  initMap();
+});
+
 // Initialise map function, uses async prefix to ensure that it loads as the page loads.
 async function initMap() {
   // Map variable that waits to be created ones the google.maps.lib has been imported.
@@ -73,7 +83,7 @@ async function initMap() {
 }
 
 // Calls the initMap function.
-initMap();
+
 
 // This function is used for the geocoding later in the script, for our use it is basically 
 // just giving us the ability to return a Lat/Lon from a click.
@@ -90,7 +100,8 @@ function geocode(request) {
     })
     // Catch statement on error.
     .catch((e) => {
-      alert("Geocode was not successful for the following reason: " + e);
+      console.log("Geocode Error=" + e);
+      // $('#geo-error-modal').modal('show'); function needs to be finessed
     });
 }
 
@@ -132,11 +143,12 @@ function geocodeLatLng(geocoder, map) {
 
         // If not data returned, display an error alert to the user.
       } else {
-        window.alert("No results found, try clicking somewhere else.");
+        console.log("error with geocode");
+        $('#no-jobs-modal').modal('show'); 
       }
     })
     // Catch statement for further errors.
-    .catch((e) => window.alert("Geocoder failed due to: " + e));
+    .catch((e) => console.log("Geocoder failed due to: " + e));
 }
 
 // This function is called when the search button is clicked by the user.
@@ -173,18 +185,18 @@ function handleSearchEvent() {
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
   validateCountry(countryName);
-  //if it returns false from validateCountry function we have an alert
+  //if it returns false from validateCountry function we have a console logging the error- further work required
   // and our function returns ie STOPS
   var isCountryValid = validateCountry(countryName);
 
   if (!isCountryValid) {
-    alert("invalid country, please enter a valid country or check spelling")
+    console.log("invalid country, please enter a valid country or check spelling")
     return;
   }
 
   // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
   if (!countryName) {
-    window.alert("Please enter a valid Country")
+    console.logs("Please enter a valid Country")
     return
   }
 
@@ -193,12 +205,12 @@ function handleSearchEvent() {
   // Using  validateCity function (below this) to do so (json library use)
   validateCity(cityName);
 
-  //if it returns false from  validateCity function we have an alert
+  //if it returns false from  validateCity function we have a console logging the error- further work required
   // and our function returns ie STOPS
   var isCityValid = validateCity(cityName);
 
   if (!isCityValid) {
-    alert("invalid city, please enter a valid city or check spelling")
+    console.log("invalid city, please enter a valid city or check spelling")
     return;
   }
   // send this input over to create call url function
@@ -270,7 +282,7 @@ async function getDataApi(queryURL) {
   jobsData = await jobsResponse.json();
   publishArticles(jobsData)
   // if there are no jobs returned set an alert
-  if (jobsData.results == 0) { alert("no jobs for this search, please try again") };
+  if (jobsData.results == 0) { $('#no-jobs-modal').modal('show'); };
   console.log("jobsData=", jobsData) //to check data is coming through
 };
 
@@ -356,9 +368,12 @@ function saveData(event) {
   var savedCard = event.target.parentElement.parentElement.parentElement;
   console.log(savedCard);
 
+  event.target.classList.remove("primary");
+  event.target.classList.add("active");
+
   var savedJob = {
     jobTitle: savedCard.querySelector('h3').textContent,
-    jobLink: savedCard.querySelector('h3').getAttribute('href'),
+    jobLink: savedCard.querySelector('a').getAttribute('href'),
     company: savedCard.querySelector('.p-company').textContent,
     dateCreated: savedCard.querySelector('.p-date').textContent,
     jobDescription: savedCard.querySelector('.p-desc').textContent
