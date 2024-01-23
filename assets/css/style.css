@@ -7,6 +7,26 @@
 }
 #info-div {
     min-height: 15%;
+    position: relative;
+    flex-direction: column;
+    display: flex;
+}
+
+.cards {
+    min-height: 200px;
+    top: 20px;
+}
+
+.card {
+  padding: 50%;
+}
+
+.align-self {
+  position: absolute;
+  bottom: 10px;
+  left: 5%;
+  max-width: 90%;
+
 }
 
 
@@ -32,3 +52,4 @@
     border-right: 8px solid transparent;
     border-top: 8px solid #000000;
   }
+

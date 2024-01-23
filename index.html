@@ -20,55 +20,25 @@
                 Home
             </a>
             <a class="item" href="./saved-insights.html">
-                Saved Headlines
+                Saved Job Offers
             </a>
         </div>
     </div>
 
-    <!-- input area div -->
+    <!-- Country Search Box -->
     <div class="ui container segment menu">
+        <input id="pac-input" type="text" placeholder="Enter a Country">
 
-        <!-- keyword input -->
+
+        <!-- City Search Box -->
         <div class="ui input focus">
-            <input id="keyword" type="text" placeholder="Keyword Search">
+            <input id="pac-input" type="text" placeholder="Enter a City">
         </div>
 
-        <!-- city input -->
+        <!-- Key Word Search Box -->
         <div class="ui input focus">
-            <input id="city" type="text" placeholder="City Search">
+            <input id="pac-input" type="text" placeholder="Key words (job Description)">
         </div>
-
-         <!-- country input -->
-         <div class="ui input focus">
-            <input id="country" type="text" placeholder="Country Search">
-        </div>
-        <!-- radius selection dropdown -->
-        <div class="ui inverted selection dropdown">
-            <input id=radius type="hidden" name="Radius">
-            <i class="dropdown icon"></i>
-
-            <div class="default text">Choose a radius</div>
-
-            <div class="menu">
-                <div class="item" data-value="10">10km</div>
-                <div class="item" data-value="20">20km</div>
-                <div class="item" data-value="30">30km</div>
-                <div class="item" data-value="40">40km</div>
-                <div class="item" data-value="50">50km</div>
-            </div>
-        </div>
-
-        <!-- State selection dropdown 
-        <select name="state" multiple="" class="ui fluid dropdown">
-            <option value="">Choose State</option>
-            <option value="victoria">Victoria</option>
-            <option value="new-south-wales">New South Wales</option>
-            <option value="queensland">Queensland</option>
-            <option value="tasmania">Tasmania</option>
-            <option value="northern-territory">Norther Territory</option>
-            <option value="south-australia">South Australia</option>
-            <option value="western-australia">Western Australia</option>
-        </select> -->
 
         <!-- Search button -->
         <button id="search-btn" class="ui secondary button wide">
@@ -76,26 +46,44 @@
         </button>
     </div>
   
+  
     <div id="map" class="ui raised container segment menu">
         <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
             </gmp-advanced-marker>
         </gmp-map>
     </div>
-    <div id="info-div" class="ui container segment">
-        <h2 class="ui header">Headlines</h2>
-        <div id="publish-jobs class=ui segment">
-            <!-- loader for between search and results -->
-            <!-- <div class="ui disabled loader"></div> -->
+
+    <div id="info-div" class="ui container segment menu">
+        <h2 class="ui header">Saved Job Offers</h2>
+        <div class="ui cards">
+            <div class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p>placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui red button" onclick="deleteData()">Delete</button>
+                    </div >
+                </div>
+            </div>
+            <div class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p>placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui red button" onclick="deleteData()">Delete</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-      <!-- Buttons for Save and Delete -->
-    <div class="ui two buttons">
-        <button class="ui primary button" onclick="saveData()">Save</button>
-        <button class="ui red button" onclick="deleteData()">Delete</button>
-    </div>
-    </div>
+    <!-- Display saved data -->
+    <div id="savedData" class="ui message">
+        <div class="header"></div>
+        <p></p>
     </div>
 
     <!-- Footer -->
