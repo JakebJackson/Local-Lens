@@ -2,6 +2,24 @@
 $('.ui.dropdown')
   .dropdown();
 
+// JOBS API VARS
+var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
+var applicationID = "89225970";
+var keywordInput = document.getElementById("keyword");
+var cityInput = document.getElementById("city");
+var countryInput = document.getElementById("country");
+var radiusInput = document.getElementById("radius");
+var searchBtn = document.getElementById("search-btn");
+var publish = document.getElementById("publish-article"); 
+var publish = document.getElementById("publish-jobs");
+var jobsData; //establishing global variable for API call
+var keyword;
+var cityName;
+var countryName;
+var radius;
+var countryCode;
+
+
 // Basic global variables for use in functions (subject to change most of these are for testing.)
 var markerLat;
 var markerLon;
@@ -11,8 +29,6 @@ var geocoder;
 var userLatLng;
 var chosenCity;
 var chosenCountry;
-
-var searchBtn = $('#search-btn');
 
 // Calls the initMap function.
 initMap();
@@ -93,8 +109,11 @@ function geocodeLatLng(geocoder, map) {
           chosenCountry = clickEvent.address_components[countryIndex].short_name;
         }
 
-        console.log(chosenCity);
-        console.log(chosenCountry);
+        keyword = keywordInput.value.trim();
+        countryCode = chosenCountry.toLowerCase();
+        cityName = chosenCity;
+        radius = 20;
+        createCallUrl(countryCode, keyword, cityName, radius)
       } else {
         window.alert("No results found");
       }
@@ -121,48 +140,15 @@ async function markerTest() {
   console.log("Marker created");
 }
 
-// AUTO COMPLETE CODE
-const center = { lat: 50.064192, lng: -130.605469 };
-// Create a bounding box with sides ~10km away from the center point
-const defaultBounds = {
-  north: center.lat + 0.1,
-  south: center.lat - 0.1,
-  east: center.lng + 0.1,
-  west: center.lng - 0.1,
-};
-
-const input = document.getElementById("pac-input");
-const options = {
-  bounds: defaultBounds,
-  componentRestrictions: { country: "au" },
-  fields: ["address_components", "geometry", "icon", "name"],
-  strictBounds: false,
-};
-const autocomplete = new google.maps.places.Autocomplete(input, options);
-
-//news associated variables
-var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
-var applicationID = "89225970";
-var keywordInput = document.getElementById("keyword");
-var cityInput = document.getElementById("city");
-var countryInput = document.getElementById("country");
-var radiusInput = document.getElementById("radius");
-var searchBtn = document.getElementById("search-btn");
-var publish = document.getElementById("publish-article"); 
-var publish = document.getElementById("publish-jobs");
-var jobsData; //establishing global variable for API call
-
-//getting the date from 7 days ago, in required parameter format, to keep news articles current
-
 // event listener on the search button click
 searchBtn.addEventListener("click", handleSearchEvent);
 
 function handleSearchEvent() {
-  var keyword = keywordInput.value.trim();
-  var cityName = cityInput.value.trim();
-  var countryName = countryInput.value.trim();
-  var radius = radiusInput.value;
-  var countryCode = (countryList.code(countryName)).toLowerCase(); //gets country ISO from JSON library
+  keyword = keywordInput.value.trim();
+  cityName = cityInput.value.trim();
+  countryName = countryInput.value.trim();
+  radius = radiusInput.value;
+  countryCode = (countryList.code(countryName)).toLowerCase(); //gets country ISO from JSON library
 
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
@@ -227,11 +213,6 @@ function validateCity(cityName) {
   //   return true;}
 };
 
-
-
-
-
-
 //getting the api string from the user input
 function createCallUrl(countryCode, keyword, cityName, radius) {
 
@@ -267,7 +248,7 @@ async function getDataApi(queryURL) {
   jobsData = await jobsResponse.json();
   publishArticles(jobsData)
   // if there are no jobs returned set an alert
-  if (!jobsData.results == 0) { alert("no jobs for this search, please try again") };
+  if (jobsData.results == 0) { alert("no jobs for this search, please try again") };
   console.log("jobsData=", jobsData) //to check data is coming through
 };
 
@@ -276,14 +257,20 @@ function publishArticles(jobsData) {
 
   var searchResults = jobsData.results;
 
+  // Removes the hide ID from the selected cards element
+  document.getElementById('cards-hide').removeAttribute('id');
+
 
   for (var i = 0; i < (searchResults.length); i++) {
-
+    var jobTitle = searchResults[i].title || "n/a";
     var company = searchResults[i].company.display_name || "n/a";
     var dateCreated = searchResults[i].created || "n/a";
     var jobDescription = searchResults[i].description || "n/a";
-    var jobTitle = searchResults[i].title || "n/a";
-    console.log("publishedArticlesData=", company, dateCreated, jobDescription, jobTitle);
+    jobDescription = jobDescription.substr(0, 149) + "...";
 
+    $('#card'+i).children('div').children("h3").text(jobTitle);
+    $('#card'+i).find('.p-company').text(company);
+    $('#card'+i).find('.p-date').text(dateCreated);
+    $('#card'+i).find('.p-desc').text(jobDescription);
   }
 };

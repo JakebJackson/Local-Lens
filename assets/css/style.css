@@ -2,19 +2,27 @@
   padding: 10px;
 }
 
+#cards-hide {
+  display: none;
+}
+
 #map {
     min-height: 50%;
 }
-#info-div {
+#publish-jobs {
     min-height: 15%;
     position: relative;
     flex-direction: column;
     display: flex;
 }
 
+#btn-div {
+  min-height: 40px;
+}
+
 .cards {
-    min-height: 200px;
     top: 20px;
+    align-items: center;
 }
 
 .card {

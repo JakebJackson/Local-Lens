@@ -25,28 +25,41 @@
         </div>
     </div>
 
-    <!-- Country Search Box -->
+    <!-- Key Word Search Box -->
     <div class="ui container segment menu">
-        <input id="pac-input" type="text" placeholder="Enter a Country">
-
+        <div class="ui input focus">
+            <input id="keyword" type="text" placeholder="Job title">
+        </div>
 
         <!-- City Search Box -->
         <div class="ui input focus">
-            <input id="pac-input" type="text" placeholder="Enter a City">
+            <input id="city" type="text" placeholder="Enter a City">
         </div>
 
-        <!-- Key Word Search Box -->
-        <div class="ui input focus">
-            <input id="pac-input" type="text" placeholder="Key words (job Description)">
+        <!-- Country Search Box -->
+        <input id="country" type="text" placeholder="Enter a Country">
+
+        <div class="ui inverted selection dropdown">
+            <input id=radius type="hidden" name="Radius">
+            <i class="dropdown icon"></i>
+            <div class="default text">Choose a radius</div>
+            <div class="menu">
+                <div class="item" data-value="10">10km</div>
+                <div class="item" data-value="20">20km</div>
+                <div class="item" data-value="30">30km</div>
+                <div class="item" data-value="40">40km</div>
+                <div class="item" data-value="50">50km</div>
+            </div>
         </div>
+
 
         <!-- Search button -->
         <button id="search-btn" class="ui secondary button wide">
             Search
         </button>
     </div>
-  
-  
+
+
     <div id="map" class="ui raised container segment menu">
         <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
@@ -54,27 +67,137 @@
         </gmp-map>
     </div>
 
-    <div id="info-div" class="ui container segment menu">
+    <div id="publish-jobs" class="ui container segment menu">
         <h2 class="ui header">Saved Job Offers</h2>
-        <div class="ui cards">
-            <div class="card">
+        <div id="cards-hide" class="ui cards">
+            <div id="card0" class="card">
                 <div class="content">
                     <h3>placeholder</h3>
-                    <p>placeholder</p>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
                     <div class="ui two buttons align-self">
                         <button class="ui primary button" onclick="saveData()">Save</button>
-                        <button class="ui red button" onclick="deleteData()">Delete</button>
-                    </div >
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
                 </div>
             </div>
-            <div class="card">
+            <div id="card1" class="card">
                 <div class="content">
                     <h3>placeholder</h3>
-                    <p>placeholder</p>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
                     <div class="ui two buttons align-self">
                         <button class="ui primary button" onclick="saveData()">Save</button>
-                        <button class="ui red button" onclick="deleteData()">Delete</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
                     </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card2" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card3" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card4" class="card">
+                <div id="card" class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card5" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card6" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card7" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card8" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
+                </div>
+            </div>
+            <div id="card9" class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p class="p-company">placeholder</p>
+                    <p class="p-date">placeholder</p>
+                    <p class="p-desc">placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui dark button" onclick="deleteData()">Delete</button>
+                    </div>
+                    <div id="btn-div"></div>
                 </div>
             </div>
         </div>
@@ -90,15 +213,14 @@
     <div class="ui section divider segment">
         <div class="ui center aligned container">
             <!-- WorldNewsAPI requires a backlink have added to footer text -->
-            <p class="ui subtext">This website is using Google Maps API in combination with <a href="https://worldnewsapi.com/">World News API</a> </p>
+            <p class="ui subtext">This website is using Google Maps API in combination with <a
+                    href="https://developer.adzuna.com/">Adzuna Job Listing API</a> </p>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js    "></script>
-    <!-- Library of countries to make sure input is correct -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/country-list-js@3.1.8/index.min.js"></script> -->
     <!-- Library of ISO countries to convert country input -->
     <script src="https://cdn.jsdelivr.net/npm/iso-3166-country-list@0.2.0/country-list.min.js"></script>
     <!-- Library of cities with cities make sure input is correct -->
