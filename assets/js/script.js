@@ -128,12 +128,24 @@ async function getDataApi(queryURL) {
   var jobsResponse = await fetch(queryURL);
   jobsData = await jobsResponse.json();
   publishArticles(jobsData)
-  console.log(jobsData)
+  // if there are no jobs returned set an alert
+  if (!jobsData.results == 0) { alert("no jobs for this search, please try again") };
+  console.log("jobsData=", jobsData) //to check data is coming through
 };
 
-function publishArticles(jobsData) {}
-// jobsdata > results {0-9}
-// jobsdata > company > display_name
-// jobsdata > created
-// jobsdata > description
-// jobsdata > title
+// get data from api call
+function publishArticles(jobsData) {
+
+  var searchResults = jobsData.results;
+
+
+  for (var i = 0; i < (searchResults.length); i++) {
+
+    var company = searchResults[i].company.display_name || "n/a";
+    var dateCreated = searchResults[i].created || "n/a";
+    var jobDescription = searchResults[i].description || "n/a";
+    var jobTitle = searchResults[i].title || "n/a";
+    console.log("publishedArticlesData=", company, dateCreated, jobDescription, jobTitle);
+
+  }
+};
