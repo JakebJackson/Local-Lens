@@ -5,22 +5,24 @@ $('.ui.dropdown')
 // JOBS API VARS
 var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
 var applicationID = "89225970";
-var keywordInput = document.getElementById("keyword");
-var cityInput = document.getElementById("city");
-var countryInput = document.getElementById("country");
-var radiusInput = document.getElementById("radius");
-var searchBtn = document.getElementById("search-btn");
-var publish = document.getElementById("publish-article"); 
-var publish = document.getElementById("publish-jobs");
 var jobsData; //establishing global variable for API call
 var keyword;
 var cityName;
 var countryName;
 var radius;
 var countryCode;
+// ELEMENT VARIABLES
+var keywordInput = document.getElementById("keyword");
+var cityInput = document.getElementById("city");
+var countryInput = document.getElementById("country");
+var radiusInput = document.getElementById("radius");
+var searchBtn = document.getElementById("search-btn");
+// var publish = document.getElementById("publish-article"); 
+var publish = document.getElementById("publish-jobs");
+var cardsDiv = $('#publish-jobs').children('div');
+var idRemoved = false;
 
-
-// Basic global variables for use in functions (subject to change most of these are for testing.)
+// GLOBAL MAP API VARIABLES
 var markerLat;
 var markerLon;
 var userZoom = 10;
@@ -29,9 +31,14 @@ var geocoder;
 var userLatLng;
 var chosenCity;
 var chosenCountry;
+var savedNum
 
-// Calls the initMap function.
-initMap();
+// LOCAL STORAGE VARIABLES
+if (localStorage.getItem("savedNum") != null) {
+  savedNum = JSON.parse(localStorage.getItem("savedNum"));
+} else {
+  savedNum = 0
+}
 
 // Initialise map function, uses async prefix to ensure that it loads as the page loads.
 async function initMap() {
@@ -51,11 +58,12 @@ async function initMap() {
   // CALLING GEOCODING FUNCTION
   geocoder = new google.maps.Geocoder();
 
+  // Creates a marker from the google maps library for later use.
   marker = new google.maps.Marker({
     map,
   });
   
-  // EVEMT LISTENER WHEN MAP IS CLICKED
+  // EVENT LISTENER WHEN MAP IS CLICKED
   map.addListener('click', (e) => {
     // Location refers to the webpage, e to the event (click) and latLang to call the latitude/longitude.
     geocode({ location: e.latLng });
@@ -66,9 +74,12 @@ async function initMap() {
   return map;
 }
 
-// NEED TO TRANSLATE THIS FOR THE CURRENT MAP
+// Calls the initMap function.
+initMap();
+
+// This function is used for the geocoding later in the script, for our use it is basically 
+// just giving us the ability to return a Lat/Lon from a click.
 function geocode(request) {
-  // CLEAR FUNCTION: clear();
   geocoder
     .geocode(request)
     .then((result) => {
@@ -79,16 +90,19 @@ function geocode(request) {
       marker.setMap(map);
       return results;
     })
+    // Catch statement on error.
     .catch((e) => {
       alert("Geocode was not successful for the following reason: " + e);
     });
 }
 
+// Function for reverse geocoding, takes a user click, get the Latitude/Longitude of the click event
+// and transfers it into a usable city and country for the Job List API call.
 function geocodeLatLng(geocoder, map) {
-
   geocoder
     .geocode({ location: userLatLng })
     .then((response) => {
+      // Checks if the click event returrns data
       if (response.results[0]) {
         map.setZoom(11);
 
@@ -109,15 +123,21 @@ function geocodeLatLng(geocoder, map) {
           chosenCountry = clickEvent.address_components[countryIndex].short_name;
         }
 
+        // The following converts the variables into formatting usable in the API call.
         keyword = keywordInput.value.trim();
         countryCode = chosenCountry.toLowerCase();
         cityName = chosenCity;
         radius = 20;
+
+        // Calls the function to make the call and parses the relevant variables.
         createCallUrl(countryCode, keyword, cityName, radius)
+
+      // If not data returned, display an error alert to the user.
       } else {
-        window.alert("No results found");
+        window.alert("No results found, try clicking somewhere else.");
       }
     })
+    // Catch statement for further errors.
     .catch((e) => window.alert("Geocoder failed due to: " + e));
 }
 
@@ -258,19 +278,48 @@ function publishArticles(jobsData) {
   var searchResults = jobsData.results;
 
   // Removes the hide ID from the selected cards element
-  document.getElementById('cards-hide').removeAttribute('id');
+  if (!idRemoved) {
+    document.getElementById('cards-hide').removeAttribute('id');
+    idRemoved = true;
+  }
 
-
+  // for loop for dynamically populating the HTML elements with the returned data until the loop runs out of job listings.
   for (var i = 0; i < (searchResults.length); i++) {
+    // Filters through data to create relevant variables.
     var jobTitle = searchResults[i].title || "n/a";
     var company = searchResults[i].company.display_name || "n/a";
     var dateCreated = searchResults[i].created || "n/a";
     var jobDescription = searchResults[i].description || "n/a";
+    var jobLink = searchResults[i].redirect_url || "n/a";
+    // Makes sure that the job description does not exceed 150 chars.
     jobDescription = jobDescription.substr(0, 149) + "...";
 
+    // TODO: Create a href in the title for linking to the job posting.
+
+    // Populates the web page with the filtered data
     $('#card'+i).children('div').children("h3").text(jobTitle);
+    $('#card'+i).children('div').children("h3").wrap('<a href="' + jobLink + '"></a>')
     $('#card'+i).find('.p-company').text(company);
     $('#card'+i).find('.p-date').text(dateCreated);
     $('#card'+i).find('.p-desc').text(jobDescription);
   }
 };
+
+// LOCAL STORAGE HANDLING
+function saveData(event) {
+  var savedCard = event.target.parentElement.parentElement.parentElement;
+  console.log(savedCard);
+
+  var savedJob = {
+    jobTitle: savedCard.querySelector('h3').textContent,
+    jobLink: savedCard.querySelector('h3').getAttribute('href'),
+    company: savedCard.querySelector('.p-company').textContent,
+    dateCreated: savedCard.querySelector('.p-date').textContent,
+    jobDescription: savedCard.querySelector('.p-desc').textContent
+  };
+
+  localStorage.setItem("savedJob" + savedNum, JSON.stringify(savedJob));
+
+  savedNum++
+  localStorage.setItem("savedNum", savedNum);
+}
