@@ -14,6 +14,8 @@ The use of the "Adzuna" API allows users to search a list for up to 10, title sp
 
 [GitHubRepository](https://github.com/JakebJackson/Local-Lens/)
 
+[Google Slides](https://docs.google.com/presentation/d/1NZZXKzB9Tw0f0PkNFrdUUmuMWjwgp1JFCdDhdE2UyXU/edit?usp=sharing)
+
 ## Usage
 
 Using the "Local Lens" site is very user-friendly for first-time users.  

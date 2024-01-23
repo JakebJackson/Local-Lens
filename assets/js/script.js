@@ -45,6 +45,11 @@ if (localStorage.getItem("savedNum") != null) {
   savedNum = 0
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  // Your function or code here
+  initMap();
+});
+
 // Initialise map function, uses async prefix to ensure that it loads as the page loads.
 async function initMap() {
   // Map variable that waits to be created ones the google.maps.lib has been imported.
@@ -80,7 +85,7 @@ async function initMap() {
 }
 
 // Calls the initMap function.
-initMap();
+
 
 // This function is used for the geocoding later in the script, for our use it is basically 
 // just giving us the ability to return a Lat/Lon from a click.
@@ -140,11 +145,12 @@ function geocodeLatLng(geocoder, map) {
 
         // If not data returned, display an error alert to the user.
       } else {
-        // $('#no-jobs-modal').modal('show'); function needs to be finessed
+        console.log("error with geocode");
+        $('#no-jobs-modal').modal('show'); 
       }
     })
     // Catch statement for further errors.
-    .catch((e) => console.log("Geocoder failed due to: " + e), $('#geo-error-modal').modal('show'));
+    .catch((e) => console.log("Geocoder failed due to: " + e));
 }
 
 // This function is called when the search button is clicked by the user.
@@ -318,9 +324,12 @@ function saveData(event) {
   var savedCard = event.target.parentElement.parentElement.parentElement;
   console.log(savedCard);
 
+  event.target.classList.remove("primary");
+  event.target.classList.add("active");
+
   var savedJob = {
     jobTitle: savedCard.querySelector('h3').textContent,
-    jobLink: savedCard.querySelector('h3').getAttribute('href'),
+    jobLink: savedCard.querySelector('a').getAttribute('href'),
     company: savedCard.querySelector('.p-company').textContent,
     dateCreated: savedCard.querySelector('.p-date').textContent,
     jobDescription: savedCard.querySelector('.p-desc').textContent
