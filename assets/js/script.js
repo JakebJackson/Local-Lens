@@ -98,7 +98,7 @@ function geocode(request) {
     // Catch statement on error.
     .catch((e) => {
       console.log("Geocode Error=" + e);
-      $('#geo-error-modal').modal('show');
+      // $('#geo-error-modal').modal('show'); function needs to be finessed
     });
 }
 
@@ -140,7 +140,7 @@ function geocodeLatLng(geocoder, map) {
 
         // If not data returned, display an error alert to the user.
       } else {
-        $('#no-jobs-modal').modal('show');
+        // $('#no-jobs-modal').modal('show'); function needs to be finessed
       }
     })
     // Catch statement for further errors.
