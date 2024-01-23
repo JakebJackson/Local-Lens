@@ -1,9 +1,14 @@
+.card {
+  padding: 10px;
+}
+
 #map {
     min-height: 50%;
 }
 #info-div {
     min-height: 15%;
 }
+
 
 /* This is the CSS for the price-tag markers. */
 .price-tag {
