@@ -1,10 +1,55 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="./assets/css/style.css" rel="stylesheet">
+    <link href="
+https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css
+" rel="stylesheet">
+
+    <title>Local Lens</title>
 </head>
+
+
 <body>
+    <!-- Nav menu bar -->
+    <div class="ui inverted segment">
+        <div class="ui inverted secondary menu">
+            <a class="active right floated item" href = "index.html">
+                Home
+            </a>
+    </div>
+
+    <div class="ui padded segment ">
+        <h2 class="ui header">Saved Headlines</h2>
+    </div>
+
+    <!-- SAVED ITEMS -->
+<div class="ui segment">
+    <!-- placeholder for dynamic elements to be generated -->
+    <div class="ui two column stackable grid ">
+        <div class="four wide column">
+            <button id="search-btn" class="ui secondary button wide">
+                Delete
+            </button>
+        </div>
+
+         <div class="twelve wide column stackable grid">
+            <p>Placeholder text for saved headlines</p>
+        </div>
+    </div>
     
+   
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js
+    "></script>
+    <script src="./assets/js/saved-insights.js"></script>
 </body>
+
 </html>

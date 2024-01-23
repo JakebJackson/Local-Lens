@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
     <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=weekly"></script>
     <title>Local Lens</title>
 </head>
 
@@ -20,51 +20,43 @@
                 Home
             </a>
             <a class="item" href="./saved-insights.html">
-                Saved Insights
-            </a>
-            <a class="item">
-                Results
+                Saved Headlines
             </a>
         </div>
     </div>
 
-    <!-- Price range selection dropdown -->
+    <!-- input area div -->
     <div class="ui container segment menu">
-        <div class="ui inverted selection dropdown">
-            <input type="hidden" name="price-range">
-            <i class="dropdown icon"></i>
-            <div class="default text">Price Range</div>
-            <div class="menu">
-                <div class="item" data-value="0">200-400K</div>
-                <div class="item" data-value="1">400-600K</div>
-                <div class="item" data-value="2">600-800K</div>
-                <div class="item" data-value="3">800K-1M</div>
-                <div class="item" data-value="4">1M+</div>
-                <div class="divider"></div>
-                <div class="item" data-value="5">Any</div>
-            </div>
-        </div>
 
-        <!-- Property type selection dropdown -->
-        <div class="ui selection dropdown">
-            <input type="hidden" name="property-type">
-            <i class="dropdown icon"></i>
-            <div class="default text">Property Type</div>
-            <div class="menu">
-                <div class="item" data-value="0">Unit</div>
-                <div class="item" data-value="1">Apartment</div>
-                <div class="item" data-value="2">Duplex</div>
-                <div class="item" data-value="3">House</div>
-                <div class="divider"></div>
-                <div class="item" data-value="5">All</div>
-            </div>
-        </div>
-
-
+        <!-- keyword input -->
         <div class="ui input focus">
-            <input id="pac-input" type="text" placeholder="Search...">
+            <input id="keyword" type="text" placeholder="Keyword Search">
         </div>
 
+        <!-- city input -->
+        <div class="ui input focus">
+            <input id="city" type="text" placeholder="City Search">
+        </div>
+
+         <!-- country input -->
+         <div class="ui input focus">
+            <input id="country" type="text" placeholder="Country Search">
+        </div>
+        <!-- radius selection dropdown -->
+        <div class="ui inverted selection dropdown">
+            <input id=radius type="hidden" name="Radius">
+            <i class="dropdown icon"></i>
+
+            <div class="default text">Choose a radius</div>
+
+            <div class="menu">
+                <div class="item" data-value="10">10km</div>
+                <div class="item" data-value="20">20km</div>
+                <div class="item" data-value="30">30km</div>
+                <div class="item" data-value="40">40km</div>
+                <div class="item" data-value="50">50km</div>
+            </div>
+        </div>
 
         <!-- State selection dropdown 
         <select name="state" multiple="" class="ui fluid dropdown">
@@ -79,95 +71,50 @@
         </select> -->
 
         <!-- Search button -->
-        <button id="search-btn" class="ui secondary button wide" onclick="markerTest()">
+        <button id="search-btn" class="ui secondary button wide">
             Search
         </button>
     </div>
-
+  
     <div id="map" class="ui raised container segment menu">
         <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
             </gmp-advanced-marker>
         </gmp-map>
     </div>
-
-    <div id="info-div" class="ui container segment menu">
-        <div>
-            <h2 class="header">Information Panel</h2>
-            <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">
-                            Elliot Fu
-                        </div>
-                        <div class="meta">
-                            Friends of Veronika
-                        </div>
-                        <div class="description">
-                            Elliot requested permission to view your contact details
-                        </div>
-                    </div>
-                    <div class="extra content">
-                        <div class="ui two buttons">
-                            <div class="ui basic green button">Approve</div>
-                            <div class="ui basic red button">Decline</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">
-                            Jenny Hess
-                        </div>
-                        <div class="meta">
-                            New Member
-                        </div>
-                        <div class="description">
-                            Jenny wants to add you to the group <b>best friends</b>
-                        </div>
-                    </div>
-                    <div class="extra content">
-                        <div class="ui two buttons">
-                            <div class="ui basic green button">Approve</div>
-                            <div class="ui basic red button">Decline</div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">
-                                Jenny Hess
-                            </div>
-                            <div class="meta">
-                                New Member
-                            </div>
-                            <div class="description">
-                                Jenny wants to add you to the group <b>best friends</b>
-                            </div>
-                        </div>
-                        <div class="extra content">
-                            <div class="ui two buttons">
-                                <div class="ui basic green button">Approve</div>
-                                <div class="ui basic red button">Decline</div>
-                            </div>
-                        </div>
-                </div>
-            </div>
+    <div id="info-div" class="ui container segment">
+        <h2 class="ui header">Headlines</h2>
+        <div id="publish-jobs class=ui segment">
+            <!-- loader for between search and results -->
+            <!-- <div class="ui disabled loader"></div> -->
         </div>
+    </div>
 
+      <!-- Buttons for Save and Delete -->
+    <div class="ui two buttons">
+        <button class="ui primary button" onclick="saveData()">Save</button>
+        <button class="ui red button" onclick="deleteData()">Delete</button>
+    </div>
+    </div>
     </div>
 
     <!-- Footer -->
     <div class="ui section divider segment">
         <div class="ui center aligned container">
-            <p class="ui subtext">This website was built with Geocode API and Domain Group API </p>
+            <!-- WorldNewsAPI requires a backlink have added to footer text -->
+            <p class="ui subtext">This website is using Google Maps API in combination with <a href="https://worldnewsapi.com/">World News API</a> </p>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="
-    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js
-    "></script>
+    <script src="    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js    "></script>
+    <!-- Library of countries to make sure input is correct -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/country-list-js@3.1.8/index.min.js"></script> -->
+    <!-- Library of ISO countries to convert country input -->
+    <script src="https://cdn.jsdelivr.net/npm/iso-3166-country-list@0.2.0/country-list.min.js"></script>
+    <!-- Library of cities with cities make sure input is correct -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/cities@1.0.4/cities.json"></script> -->
     <script src="./assets/js/script.js"></script>
 </body>
 
