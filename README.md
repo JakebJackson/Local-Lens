@@ -25,14 +25,16 @@ Using the "Local Lens" site is very user-friendly for first-time users.
 
 ## Future Updates 
 
-1. Job listing address pops up on map with clickable pin
-2. Update validation for user input ie. country spellcheck etc with workable libraries or arrays
-3. Catch functions
-4. Throw functions.
-5. Check if there is a limit on ISO countries accepted in Adzuna API and adjust code to limit, or extend API use
-6. Companies seeking local employees can target those looking within a certain area 
-7. Equally employees searching in a specific area can target companies actively seeking employees within a specific area
-8. These localiesed job search functions can assist companies and workers in gaining an advantage to building business within their communities.
+1. Brand assets and branding across web application.
+2. Job listing .pops up on map area with clickable pin.
+3. Update validation for user input ie. country spellcheck etc with workable libraries or arrays
+4. Catch functions
+5. Throw functions.
+6. Check if there is a limit on ISO countries accepted in Adzuna API and adjust code to limit, or extend API use for more global opportunities.
+7. Extend the functionality to accommodate businesses/companies seeking local employees. 
+8. Crossover business targeted version with employee targeted version to link active seekers of local employees/employers.
+
+
 
 ## Local Lens Project Screenshot
 
