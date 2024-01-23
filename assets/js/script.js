@@ -203,6 +203,8 @@ function handleSearchEvent() {
   }
   // send this input over to create call url function
   createCallUrl(countryCode, keyword, cityName, radius);
+
+  return;
 }
 
 //function for determining if the country is VALID (or correctly spelled)  usinng json library
@@ -264,7 +266,7 @@ function createCallUrl(countryCode, keyword, cityName, radius) {
 
 // This is the api call using the queryURL concatenated above from user input
 async function getDataApi(queryURL) {
-  var jobsResponse = await fetch(queryURL);
+  jobsResponse = await fetch(queryURL);
   jobsData = await jobsResponse.json();
   publishArticles(jobsData)
   // if there are no jobs returned set an alert
@@ -297,8 +299,8 @@ function publishArticles(jobsData) {
     // TODO: Create a href in the title for linking to the job posting.
 
     // Populates the web page with the filtered data
-    $('#card'+i).children('div').children("h3").text(jobTitle);
     $('#card'+i).children('div').children("h3").wrap('<a href="' + jobLink + '"></a>')
+    $('#card'+i).children('div').children("a").children("h3").text(jobTitle);
     $('#card'+i).find('.p-company').text(company);
     $('#card'+i).find('.p-date').text(dateCreated);
     $('#card'+i).find('.p-desc').text(jobDescription);
