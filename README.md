@@ -10,7 +10,8 @@ The use of the "Adzuna" API allows users to search a list for up to 10, title sp
 
 ## Project URL's
 
-[Deployed URL]()
+[Deployed URL](https://jakebjackson.github.io/Local-Lens/)  
+
 [GitHubRepository](https://github.com/JakebJackson/Local-Lens/)
 
 ## Usage
@@ -38,7 +39,7 @@ Using the "Local Lens" site is very user-friendly for first-time users.
 
 ## Local Lens Project Screenshot
 
-( Awaiting Screenshot Implementation )
+![Deployed Site](/assets/Site-img.JPG)
 
 ## Github Collaborators 
 
@@ -49,7 +50,7 @@ Using the "Local Lens" site is very user-friendly for first-time users.
 
 ## Linked Credentials 
 
-* [Adzuna Api] (https://worldnewsapi.com/docs/#Search-News](https://developer.adzuna.com/)
+* [Adzuna Api] (https://developer.adzuna.com/)
 * [GoogleMaps Api] (https://developers.google.com/maps/documentation/geocoding)
 * [Semantic UI Framework] (https://semantic-ui.com/)
 
