@@ -347,7 +347,7 @@ function publishArticles(jobsData) {
     var saveBtnElement = document.createElement('button');
     saveBtnElement.textContent = "Save";
     saveBtnElement.setAttribute('id', 'save-btn' + i);
-    saveBtnElement.setAttribute('class', 'ui secondary button wide');
+    saveBtnElement.setAttribute('class', 'ui primary button wide');
     saveBtnElement.setAttribute('onclick', 'saveData(event)');
     contentDiv.appendChild(saveBtnElement);
 
