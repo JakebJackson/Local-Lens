@@ -2,6 +2,11 @@
 $('.ui.dropdown')
   .dropdown();
 
+$('.mini.modal')
+  .modal()
+  ;
+
+
 // JOBS API VARS
 var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
 var applicationID = "89225970";
@@ -62,7 +67,7 @@ async function initMap() {
   marker = new google.maps.Marker({
     map,
   });
-  
+
   // EVENT LISTENER WHEN MAP IS CLICKED
   map.addListener('click', (e) => {
     // Location refers to the webpage, e to the event (click) and latLang to call the latitude/longitude.
@@ -92,7 +97,8 @@ function geocode(request) {
     })
     // Catch statement on error.
     .catch((e) => {
-      alert("Geocode was not successful for the following reason: " + e);
+      console.log("Geocode Error=" + e);
+      $('#geo-error-modal').modal('show');
     });
 }
 
@@ -118,7 +124,7 @@ function geocodeLatLng(geocoder, map) {
           chosenCountry = clickEvent.address_components[countryIndex].short_name;
         } else {
           cityIndex = -5 + clickEvent.address_components.length;
-          countryIndex = -2 + clickEvent.address_components.length; 
+          countryIndex = -2 + clickEvent.address_components.length;
           chosenCity = clickEvent.address_components[cityIndex].long_name;
           chosenCountry = clickEvent.address_components[countryIndex].short_name;
         }
@@ -132,13 +138,13 @@ function geocodeLatLng(geocoder, map) {
         // Calls the function to make the call and parses the relevant variables.
         createCallUrl(countryCode, keyword, cityName, radius)
 
-      // If not data returned, display an error alert to the user.
+        // If not data returned, display an error alert to the user.
       } else {
-        window.alert("No results found, try clicking somewhere else.");
+        $('#no-jobs-modal').modal('show');
       }
     })
     // Catch statement for further errors.
-    .catch((e) => window.alert("Geocoder failed due to: " + e));
+    .catch((e) => console.log("Geocoder failed due to: " + e), $('#geo-error-modal').modal('show'));
 }
 
 // This function is called when the search button is clicked by the user.
@@ -152,7 +158,7 @@ async function markerTest() {
   // Creates a new map marker 
   const marker = new AdvancedMarkerElement({
     map: map,
-    position: { lat: markerLat, lng: markerLon},
+    position: { lat: markerLat, lng: markerLon },
     title: "Selected Area",
   });
 
@@ -173,32 +179,32 @@ function handleSearchEvent() {
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
   validateCountry(countryName);
-  //if it returns false from validateCountry function we have an alert
+  //if it returns false from validateCountry function we have a console logging the error- further work required
   // and our function returns ie STOPS
   var isCountryValid = validateCountry(countryName);
 
   if (!isCountryValid) {
-    alert("invalid country, please enter a valid country or check spelling")
+    console.log("invalid country, please enter a valid country or check spelling")
     return;
   }
-  
+
   // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
   if (!countryName) {
-    window.alert("Please enter a valid Country")
+    console.logs("Please enter a valid Country")
     return
   }
-  
+
   // CANNOT FIND A CITY LIBRARY CURRENTLY future development
   // checking the if cityName input is VALID 
   // Using  validateCity function (below this) to do so (json library use)
   validateCity(cityName);
 
-  //if it returns false from  validateCity function we have an alert
+  //if it returns false from  validateCity function we have a console logging the error- further work required
   // and our function returns ie STOPS
   var isCityValid = validateCity(cityName);
 
   if (!isCityValid) {
-    alert("invalid city, please enter a valid city or check spelling")
+    console.log("invalid city, please enter a valid city or check spelling")
     return;
   }
   // send this input over to create call url function
@@ -270,7 +276,7 @@ async function getDataApi(queryURL) {
   jobsData = await jobsResponse.json();
   publishArticles(jobsData)
   // if there are no jobs returned set an alert
-  if (jobsData.results == 0) { alert("no jobs for this search, please try again") };
+  if (jobsData.results == 0) { $('#no-jobs-modal').modal('show'); };
   console.log("jobsData=", jobsData) //to check data is coming through
 };
 
@@ -299,11 +305,11 @@ function publishArticles(jobsData) {
     // TODO: Create a href in the title for linking to the job posting.
 
     // Populates the web page with the filtered data
-    $('#card'+i).children('div').children("h3").wrap('<a href="' + jobLink + '"></a>')
-    $('#card'+i).children('div').children("a").children("h3").text(jobTitle);
-    $('#card'+i).find('.p-company').text(company);
-    $('#card'+i).find('.p-date').text(dateCreated);
-    $('#card'+i).find('.p-desc').text(jobDescription);
+    $('#card' + i).children('div').children("h3").wrap('<a href="' + jobLink + '"></a>')
+    $('#card' + i).children('div').children("a").children("h3").text(jobTitle);
+    $('#card' + i).find('.p-company').text(company);
+    $('#card' + i).find('.p-date').text(dateCreated);
+    $('#card' + i).find('.p-desc').text(jobDescription);
   }
 };
 
