@@ -4,12 +4,13 @@ $('.ui.dropdown')
 
 //news associated variables
 var APIKey = "c08910fbb16aa0e997cc52bfa37c4935";
-var applicationID = "89225970"
+var applicationID = "89225970";
 var keywordInput = document.getElementById("keyword");
 var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
+var publish = document.getElementById("publish-article"); 
 var publish = document.getElementById("publish-jobs");
 var jobsData; //establishing global variable for API call
 
@@ -36,12 +37,13 @@ function handleSearchEvent() {
     alert("invalid country, please enter a valid country or check spelling")
     return;
   }
-
+  
   // handles if the incorrect city is entered ie. it does not exist. returns after so that incorrect city is not displayed
   if (!countryName) {
     window.alert("Please enter a valid Country")
     return
   }
+  
   // CANNOT FIND A CITY LIBRARY CURRENTLY future development
   // checking the if cityName input is VALID 
   // Using  validateCity function (below this) to do so (json library use)
