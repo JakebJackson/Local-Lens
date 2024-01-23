@@ -2,21 +2,32 @@
 
 ## Project Information 
 
-Local Lens is a collaborative project designed to help users search, track, and save local news articles in any global search destination. The initial inspiration behind the construction of this project was to combine both the use of a "News Data" API and the "Google Maps" API, granting all users the ability to readily access current news events in a given area, whether it be for research use, event planning, or general interest.
+Local Lens is a collaborative project designed to help users search, track, and save local job listings in global search destinations. This project combines both the use of a "Adzuna" API and the "Google Maps" API, granting all users the ability to readily access 10 job listings per search in a given area, given a given job title whether it be for research use, career planning, or general interest.
 
-The construction of this project utilizes two main coding languages: HTML and JavaScript functionality, in combination with the SEMANTIC UI plugin. Using these languages creates a smooth user experience while also providing a comprehensive understanding for other developers seeking a deeper insight into the ins and outs of the method process.
+The construction of this project utilizes two main coding languages: HTML and JavaScript functionality, in combination with the SEMANTIC UI responsive CSS framework. Using these languages creates a smooth user experience while also providing a comprehensive understanding for other developers seeking a deeper insight into the ins and outs of the method process.
 
-The use of the "News Data" API allows users to search for any current news events within the last seven days of a given destination. Using this in combination with the "Google Maps" API gives an exact pinpoint location of any searched news events with the added ability of radius parameters depending on how refined the user wishes to have their data retrieved.
-
-The undertaking of this project had its challenging aspects of API implementtation and functionality but in doing so has given each collaborator an improved knowledge base aswell as a point of reference for future use. 
+The use of the "Adzuna" API allows users to search a list for up to 10, title specific, jobs within a given destination. Using this in combination with the "Google Maps" API gives an exact pinpoint location of any searched news events with the added ability of radius parameters depending on how refined the user wishes to have their data retrieved.
 
 ## Usage
 
-Using the "Local Lens" site is very user-friendly for first-time users. Simply enter a desired country, city, and radius parameter, and 'click' "search". The "Google Maps" API will generate your desired destination, and the "News Data" API will fetch current news articles for your targeted location. Should you wish to save a particular article, simply click the "Save" button below and navigate to your "Saved Headlines" tab located at the top of your page. All "Saved Headlines" will be saved to your local storage for future use. By using the "inspect" element in your Google Chrome tools, users and developers can see the functionality of the code's process if they seek insight into the workings of the project.
+Using the "Local Lens" site is very user-friendly for first-time users. 
+Simply enter a desired job title, city, country and radius, and click "search". 
+Alternatively you can click on a map area to retrieve up to 10 random job listings within a 20km radius.
+User is also able to enter a job title, click on a map area, and reveal 10 jobs within that area, under that job title, thus using both methods (text input to retrieve data and map click).
+Should you wish to save a particular article, simply click the "Save" button in the listing and navigate to the "Saved Headlines" tab located at the top of your page. 
+All "Saved Headlines" will be saved to your local storage for future use. 
+By using the "inspect" element in your Google Chrome tools, users and developers can see the functionality of the code's process if they seek insight into the workings of the project.
 
 ## Future Updates 
 
-( Awaiting Changes )
+Job listing address pops up on map with clickable pin
+Update validation for user input ie. country spellcheck etc with workable libraries or arrays
+Catch functions
+Throw functions.
+Check if there is a limit on ISO countries accepted in Adzuna API and adjust code to limit, or extend API use
+Companies seeking local employees can target those looking within a certain area 
+Equally employees searching in a specific area can target companies actively seeking employees within a specific area
+These localiesed job search functions can assist companies and workers in gaining an advantage to building business within their communities.
 
 ## Local Lens Project Screenshot
 
