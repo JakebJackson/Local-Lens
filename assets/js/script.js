@@ -333,15 +333,18 @@ function publishArticles(jobsData) {
 
     // Same for the rest
     var companyElement = document.createElement('p');
+    companyElement.setAttribute('class', 'p-company')
     companyElement.textContent = 'Company: ' + company;
     contentDiv.appendChild(companyElement);
 
     var dateCreatedElement = document.createElement('p');
+    dateCreatedElement.setAttribute('class', 'p-date')
     dateCreatedElement.textContent = 'Date Created: ' + dateCreated;
     contentDiv.appendChild(dateCreatedElement);
 
     var jobDescriptionElement = document.createElement('p');
     jobDescriptionElement.textContent = jobDescription;
+    jobDescriptionElement.setAttribute('class', 'p-desc')
     contentDiv.appendChild(jobDescriptionElement);
 
     var saveBtnElement = document.createElement('button');
