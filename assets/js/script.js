@@ -180,8 +180,6 @@ function handleSearchEvent() {
   radius = radiusInput.value;
   countryCode = (countryList.code(countryName)).toLowerCase(); //gets country ISO from JSON library
 
-  handleClearCards();
-
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
   validateCountry(countryName);
