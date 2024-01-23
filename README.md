@@ -29,22 +29,27 @@ Companies seeking local employees can target those looking within a certain area
 Equally employees searching in a specific area can target companies actively seeking employees within a specific area
 These localiesed job search functions can assist companies and workers in gaining an advantage to building business within their communities.
 
+## Project URL's
+
+[Deployed URL]()
+[GitHubRepository](https://github.com/JakebJackson/Local-Lens/)
+
 ## Local Lens Project Screenshot
 
 ( Awaiting Screenshot Implementation )
 
 ## Github Collaborators 
 
-* https://github.com/AlexandraNel
-* https://github.com/JakebJackson
-* https://github.com/BenRodwell
-* https://github.com/Hyne-OS1
+* [Alexandra Nel](https://github.com/AlexandraNel)
+* [Jakeb Jackson ](https://github.com/JakebJackson)
+* [Ben Rodwell](https://github.com/BenRodwell)
+* [Casey Hyne](https://github.com/Hyne-OS1)
 
 ## Linked Credentials 
 
-* https://worldnewsapi.com/docs/#Search-News
-* https://developers.google.com/maps/documentation/geocoding
-* https://semantic-ui.com/
+* [Adzuna Api] (https://worldnewsapi.com/docs/#Search-News](https://developer.adzuna.com/)
+* [GoogleMaps Api] (https://developers.google.com/maps/documentation/geocoding)
+* [Semantic UI Framework] (https://semantic-ui.com/)
 
 ## License MIT
 
