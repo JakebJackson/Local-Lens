@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./assets/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=beta"></script>    <title>Local Lens</title>
-
-
+    <link href="./assets/css/style.css" rel="stylesheet">
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChFKagYKV2F1umLygVhQs5DxiRb2OewVw&callback=console.debug&libraries=maps,marker,places&v=weekly"></script>
+    <title>Local Lens</title>
 </head>
 
 
@@ -20,53 +20,33 @@
                 Home
             </a>
             <a class="item" href="./saved-insights.html">
-                Saved Headlines
+                Saved Job Offers
             </a>
         </div>
     </div>
 
-    <!-- input area div -->
+    <!-- Country Search Box -->
     <div class="ui container segment menu">
+        <input id="pac-input" type="text" placeholder="Enter a Country">
 
-        <!-- keyword input -->
+
+        <!-- City Search Box -->
         <div class="ui input focus">
-            <input id="keyword" type="text" placeholder="Keyword Search">
+            <input id="pac-input" type="text" placeholder="Enter a City">
         </div>
 
-        <!-- city input -->
+        <!-- Key Word Search Box -->
         <div class="ui input focus">
-            <input id="city" type="text" placeholder="City Search">
+            <input id="pac-input" type="text" placeholder="Key words (job Description)">
         </div>
 
-         <!-- country input -->
-         <div class="ui input focus">
-            <input id="country" type="text" placeholder="Country Search">
-        </div>
-
-        <!-- radius selection dropdown -->
-        <div class="ui inverted selection dropdown">
-            <input id=radius type="hidden" name="Radius">
-            <i class="dropdown icon"></i>
-
-            <div class="default text">Choose a radius</div>
-
-            <div class="menu">
-                <div class="item" data-value="10">10km</div>
-                <div class="item" data-value="20">20km</div>
-                <div class="item" data-value="30">30km</div>
-                <div class="item" data-value="40">40km</div>
-                <div class="item" data-value="50">50km</div>
-            </div>
-        </div>
-
-       
         <!-- Search button -->
         <button id="search-btn" class="ui secondary button wide">
             Search
         </button>
     </div>
-
-
+  
+  
     <div id="map" class="ui raised container segment menu">
         <gmp-map center="-37.65779113769531,144.59182739257812" zoom="14" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="-37.65779113769531,144.59182739257812" title="My location">
@@ -74,20 +54,36 @@
         </gmp-map>
     </div>
 
-    <div id="info-div" class="ui container segment">
-        <h2 class="ui header">Headlines</h2>
-        <div id="publish-jobs class=ui segment">
-            <!-- loader for between search and results -->
-            <!-- <div class="ui disabled loader"></div> -->
+    <div id="info-div" class="ui container segment menu">
+        <h2 class="ui header">Saved Job Offers</h2>
+        <div class="ui cards">
+            <div class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p>placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui red button" onclick="deleteData()">Delete</button>
+                    </div >
+                </div>
+            </div>
+            <div class="card">
+                <div class="content">
+                    <h3>placeholder</h3>
+                    <p>placeholder</p>
+                    <div class="ui two buttons align-self">
+                        <button class="ui primary button" onclick="saveData()">Save</button>
+                        <button class="ui red button" onclick="deleteData()">Delete</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-      <!-- Buttons for Save and Delete -->
-    <div class="ui two buttons">
-        <button class="ui primary button" onclick="saveData()">Save</button>
-        <button class="ui red button" onclick="deleteData()">Delete</button>
-    </div>
-    </div>
+    <!-- Display saved data -->
+    <div id="savedData" class="ui message">
+        <div class="header"></div>
+        <p></p>
     </div>
 
     <!-- Footer -->
