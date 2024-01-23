@@ -8,31 +8,31 @@ The construction of this project utilizes two main coding languages: HTML and Ja
 
 The use of the "Adzuna" API allows users to search a list for up to 10, title specific, jobs within a given destination. Using this in combination with the "Google Maps" API gives an exact pinpoint location of any searched news events with the added ability of radius parameters depending on how refined the user wishes to have their data retrieved.
 
-## Usage
-
-Using the "Local Lens" site is very user-friendly for first-time users. 
-Simply enter a desired job title, city, country and radius, and click "search". 
-Alternatively you can click on a map area to retrieve up to 10 random job listings within a 20km radius.
-User is also able to enter a job title, click on a map area, and reveal 10 jobs within that area, under that job title, thus using both methods (text input to retrieve data and map click).
-Should you wish to save a particular article, simply click the "Save" button in the listing and navigate to the "Saved Headlines" tab located at the top of your page. 
-All "Saved Headlines" will be saved to your local storage for future use. 
-By using the "inspect" element in your Google Chrome tools, users and developers can see the functionality of the code's process if they seek insight into the workings of the project.
-
-## Future Updates 
-
-Job listing address pops up on map with clickable pin
-Update validation for user input ie. country spellcheck etc with workable libraries or arrays
-Catch functions
-Throw functions.
-Check if there is a limit on ISO countries accepted in Adzuna API and adjust code to limit, or extend API use
-Companies seeking local employees can target those looking within a certain area 
-Equally employees searching in a specific area can target companies actively seeking employees within a specific area
-These localiesed job search functions can assist companies and workers in gaining an advantage to building business within their communities.
-
 ## Project URL's
 
 [Deployed URL]()
 [GitHubRepository](https://github.com/JakebJackson/Local-Lens/)
+
+## Usage
+
+Using the "Local Lens" site is very user-friendly for first-time users.  
+* Simply enter a desired job title, city, country and radius, and click "search".   
+* Alternatively you can click on a map area to retrieve up to 10 random job listings within a 20km radius.  
+* User is also able to enter a job title, click on a map area, and reveal 10 jobs within that area, under that job title, thus using both methods (text input to retrieve data and map click).  
+* Should you wish to save a particular article, simply click the "Save" button in the listing and navigate to the "Saved Headlines" tab located at the top of your page.   
+* All "Saved Jobs" will be saved to your local storage for future use.   
+* By using the "inspect" element in your Google Chrome tools, users and developers can see the functionality of the code's process if they seek insight into the workings of the project.  
+
+## Future Updates 
+
+1. Job listing address pops up on map with clickable pin
+2. Update validation for user input ie. country spellcheck etc with workable libraries or arrays
+3. Catch functions
+4. Throw functions.
+5. Check if there is a limit on ISO countries accepted in Adzuna API and adjust code to limit, or extend API use
+6. Companies seeking local employees can target those looking within a certain area 
+7. Equally employees searching in a specific area can target companies actively seeking employees within a specific area
+8. These localiesed job search functions can assist companies and workers in gaining an advantage to building business within their communities.
 
 ## Local Lens Project Screenshot
 
