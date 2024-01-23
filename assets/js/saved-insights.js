@@ -79,7 +79,7 @@ function handleDeleteFromLocal(event) {
     localStorage.removeItem(elName)
     savedNum--;
     localStorage.setItem("savedNum", JSON.stringify(savedNum));
-    deleteElement.remove()
+    deleteElement.remove();
     if(savedNum == 0) {
         jobOutput.textContent = "No saved headlines!";
     }

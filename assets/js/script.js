@@ -22,11 +22,8 @@ var cityInput = document.getElementById("city");
 var countryInput = document.getElementById("country");
 var radiusInput = document.getElementById("radius");
 var searchBtn = document.getElementById("search-btn");
-// var publish = document.getElementById("publish-article"); 
 var publish = document.getElementById("publish-jobs");
-var cardsDiv = $('#publish-jobs').children('div');
-var idRemoved = false;
-
+var cardsDiv = document.getElementById('cards-div');
 // GLOBAL MAP API VARIABLES
 var markerLat;
 var markerLon;
@@ -36,7 +33,8 @@ var geocoder;
 var userLatLng;
 var chosenCity;
 var chosenCountry;
-var savedNum
+var savedNum;
+var curNumOfCards = 0;
 
 // LOCAL STORAGE VARIABLES
 if (localStorage.getItem("savedNum") != null) {
@@ -182,6 +180,8 @@ function handleSearchEvent() {
   radius = radiusInput.value;
   countryCode = (countryList.code(countryName)).toLowerCase(); //gets country ISO from JSON library
 
+  handleClearCards();
+
   // checking the if countryName input is VALID 
   // Using validateCountry function (below this) to do so (json library use)
   validateCountry(countryName);
@@ -288,15 +288,15 @@ async function getDataApi(queryURL) {
 
 // get data from api call
 function publishArticles(jobsData) {
-
   var searchResults = jobsData.results;
 
-  // Removes the hide ID from the selected cards element
-  if (!idRemoved) {
-    document.getElementById('cards-hide').removeAttribute('id');
-    idRemoved = true;
+  if (curNumOfCards) {
+    for (i = 0; i < curNumOfCards; i++) {
+      var removeCard = document.getElementById('card' + i);
+      removeCard.remove();
+    }
+    curNumOfCards = 0;
   }
-
   // for loop for dynamically populating the HTML elements with the returned data until the loop runs out of job listings.
   for (var i = 0; i < (searchResults.length); i++) {
     // Filters through data to create relevant variables.
@@ -308,7 +308,50 @@ function publishArticles(jobsData) {
     // Makes sure that the job description does not exceed 150 chars.
     jobDescription = jobDescription.substr(0, 149) + "...";
 
-    // TODO: Create a href in the title for linking to the job posting.
+
+    var newCardDiv = document.createElement('div');
+    newCardDiv.setAttribute('id', 'card' + i);
+    newCardDiv.setAttribute('class', 'card');
+    cardsDiv.appendChild(newCardDiv);
+
+    var contentDiv = document.createElement('div');
+    contentDiv.setAttribute('class', 'content');
+    newCardDiv.appendChild(contentDiv);
+
+    // Create anchor element for the job ling
+    var jobLinkElement = document.createElement('a');
+    jobLinkElement.href = jobLink;
+
+
+    // Create h3 element for job title
+    var jobTitleElement = document.createElement('h3');
+    jobTitleElement.textContent = jobTitle;
+
+    // Append the job link element to the jobTitleElement
+    jobLinkElement.appendChild(jobTitleElement);
+
+    // Append the jobLinkElement to the jobOutput div
+    contentDiv.appendChild(jobLinkElement);
+
+    // Same for the rest
+    var companyElement = document.createElement('p');
+    companyElement.textContent = 'Company: ' + company;
+    contentDiv.appendChild(companyElement);
+
+    var dateCreatedElement = document.createElement('p');
+    dateCreatedElement.textContent = 'Date Created: ' + dateCreated;
+    contentDiv.appendChild(dateCreatedElement);
+
+    var jobDescriptionElement = document.createElement('p');
+    jobDescriptionElement.textContent = jobDescription;
+    contentDiv.appendChild(jobDescriptionElement);
+
+    var saveBtnElement = document.createElement('button');
+    saveBtnElement.textContent = "Delete";
+    saveBtnElement.setAttribute('id', 'delete-btn' + i);
+    saveBtnElement.setAttribute('class', 'ui secondary button wide');
+    saveBtnElement.setAttribute('onclick', 'saveData(event)');
+    contentDiv.appendChild(saveBtnElement);
 
     // Populates the web page with the filtered data
     $('#card' + i).children('div').children("h3").wrap('<a href="' + jobLink + '"></a>')
@@ -317,6 +360,7 @@ function publishArticles(jobsData) {
     $('#card' + i).find('.p-date').text(dateCreated);
     $('#card' + i).find('.p-desc').text(jobDescription);
   }
+  curNumOfCards = searchResults.length;
 };
 
 // LOCAL STORAGE HANDLING
@@ -340,3 +384,4 @@ function saveData(event) {
   savedNum++
   localStorage.setItem("savedNum", savedNum);
 }
+
